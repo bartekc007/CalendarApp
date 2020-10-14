@@ -25,6 +25,17 @@ namespace CalendarApp
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new StyleBundle("~/Content/fullcalendarcss").Include(
+                "~/Content/themes/jquery.ui.all.css",
+                "~/Content/fullcalendar.css",
+                "~/Content/bootstrap-datetimepicker.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/fullcalendarjs").Include(
+                "~/Scripts/jquery-ui-{version}.min.js",
+                "~/Scripts/moment.min.js",
+                "~/Scripts/fullcalendar.min.js",
+                "~/Scripts/bootstrap-datetimepicker.min.js"));
         }
     }
 }
