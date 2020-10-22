@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Calendar";
+    ViewBag.Title = "Home Page";
 }
 
 <h2>@ViewBag.Title</h2>
@@ -28,38 +28,107 @@
     </div>
 </div>
 
-@section Scripts{
-    
-    <script>
-        $(document).ready(function () {
+<div id="myModelSave" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Save Event</h4>
+            </div>
+            <div class="modal-body">
+                <form class="col-md-12 form-horizontal">
+                    <input type="hidden" id="hdEventId" value="0" />
+                    <div class="form-group">
+                        <label>Subject</label>
+                        <input type="text" id="txtSubject" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Start</label>
+                        <div class="input-group date" id="dtp1">
+                            <input type="text" id="txtStart" class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label><input type="checkbox" id="chkIsFullDay" checked="checked" /> Full Day event</label>
+                        </div>
+                    </div>
+                    <div class="form-group" id="divEndDate" style="display: none;">
+                        <label>End</label>
+                        <div class="input-group date" id="dtp2">
+                            <input type="text" id="txtEnd" class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="txtDescription" rows="3" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Theme Color</label>
+                        <select id="ddThemeColor" class="form-control">
+                            <option value="pink">Default</option>
+                            <option value="red">Red</option>
+                            <option value="blue">Blue</option>
+                            <option value="black">Black</option>
+                            <option value="green">Green</option>
 
+                        </select>
+                    </div>
+                    <button type="button" id="btnSave" class="btn btn-success">Save</button>
+                </form>
+                <p id="pDetails"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+
+        $(document).ready(function () {
             var events = [];
-            $.ajax({
-                type: "GET",
-                url: "/home/GetEvents",
-                success: function (data) {
-                    $.each(data, function (i, v) {
-                        events.push({  
-                            title: v.Subject,
-                            description: v.Description,
-                            start: moment(v.TimeStart),
-                            end: v.TimeEnd != null ? moment(v.TimeEnd) : null,
-                            color: v.ThemeColor,
-                            allDat: v.IsFullDay
-                        });
-                    })
-                    GenerateCalendar(events);
-                },
-                error: function (error) {
-                    alert('failed');
-                }
-            })
+            var selectedEvent = null;
+
+            FetchEvetAndRenderCalendar();
+            function FetchEvetAndRenderCalendar() {
+                events = [];
+                $.ajax({
+                    type: "GET",
+                    url: "/home/GetEvents",
+                    success: function (data) {
+                        $.each(data, function (i, v) {
+                            events.push({
+                                eventId: v.EventId,
+                                title: v.Subject,
+                                description: v.Description,
+                                start: moment(v.TimeStart),
+                                end: v.TimeEnd != null ? moment(v.TimeEnd) : null,
+                                color: v.ThemeColor,
+                                allDay: v.IsFullDay
+                            });
+                        })
+                        GenerateCalendar(events);
+                    },
+                    error: function (error) {
+                        alert('failed');
+                    }
+                })
+            }
 
             function GenerateCalendar(events) {
                 $('#calendar').fullCalendar('destroy');
                 $('#calendar').fullCalendar({
                     contentHeight: 400,
-                    defautlDate: new Date(),
+                    defaultDate: new Date(),
                     timeFormat: 'h(:mm)a',
                     header: {
                         left: 'prev,next today',
@@ -67,7 +136,7 @@
                         right: 'month,basicWeek,basicDay,agenda'
                     },
                     eventLimit: true,
-                    eventColor: '#378006',
+                    eventColor: '#0f6778',
                     events: events,
                     eventClick: function (calEvent, jsEvent, view) {
                         selectedEvent = calEvent;
@@ -80,11 +149,160 @@
                         $modelDesrciption.append($('<p/>').html('<b>Description: </b>' + calEvent.description));
                         $('#myModel #pDetails').empty().html($modelDesrciption);
                         $('#myModel ').modal();
+                    },
+                    selectable: true,
+                    select: function (start, end) {
+                        selectedEvent = {
+
+                            title: '',
+                            description: '',
+                            start: start,
+                            end: end,
+                            allDay: false,
+                            color: ''
+                        }
+                        openAddEditForm();
+                        $('#calendar').fullCalendar('unselect');
+                    },
+                    editable: true,
+                    eventDrop: function (event) {
+                        var data = {
+                            EventId: event.eventId,
+                            Subject: event.title,
+                            TimeStart: event.start.format('DD/MM/YYYY HH:mm A'),
+                            TimeEnd: event.end != null ? event.start.format('DD/MM/YYYY HH:mm A') : null ,
+                            Description: event.description,
+                            ThemeColor: event.color,
+                            IsFullDay: event.allDay
+                        }
                     }
                 })
             }
-        })
+
+            $('#btnEdit').click(function () {
+                // Open model dialog for edit button
+                openAddEditForm();
+            })
+
+            $('#btnDelete').click(function () {
+                if (selectedEvent != null && confirm('Are you sure?')) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Home/DeleteEvent",
+                        data: { 'eventId': selectedEvent.eventId },
+                        success: function (data) {
+                            if (data.status) {
+                                // refresh the callendar
+                                FetchEvetAndRenderCalendar();
+                                $('#myModel ').modal('hide');
+                            }
+                        },
+                        error: function () {
+                            alert('Failed');
+                        }
+                    })
+                }
+            })
+
+            $('#dtp1,#dtp2').datetimepicker({
+                format: 'DD/MM/YYYY HH:mm A'
+            });
+
+            $('#chkIsFullDay').change(function () {
+                if ($(this).is(':checked')) {
+                    $('#divEndDate').hide();
+                } else {
+                    $('#divEndDate').show();
+                }
+            })
+
+            function openAddEditForm() {
+                if (selectedEvent != null) {
+                    $('#hdEventId').val(selectedEvent.eventId);
+                    $('#txtSubject').val(selectedEvent.title);
+                    $('#txtStart').val(selectedEvent.start.format('DD/MM/YYYY HH:mm A'));
+                    $('#chkIsFullDay').prop("checked", selectedEvent.allDay || false);
+                    $('#chkIsFullDay').change();
+                    $('#txtEnd').val(selectedEvent.end != null ? selectedEvent.end.format('DD/MM/YYYY HH:mm A') : '');
+                    $('#txtDescription').val(selectedEvent.description);
+                    $('#ddThemeColor').val(selectedEvent.color);
+                }
+
+                $('#MyModel').modal('hide');
+                $('#myModelSave').modal();
+
+            }
+
+            $('#btnSave').click(function () {
+                //Validation//
+                if ($('#txtSubject').val().trim() == "") {
+                    alert('Subject required');
+                    return;
+                }
+                if ($('#ddThemeColor').val().trim() == "") {
+                    alert('Theme color required');
+                    return;
+                }
+                if ($('#txtStart').val().trim() == "") {
+                    alert('Start date required');
+                    return;
+                }
+                if ($('#chkIsFullDay').is(':checked') == false && $('#txtEnd').val().trim() == "") {
+                    alert('End date required');
+                    return;
+                } else {
+                    var start = moment($('#txtStart').val(), "DD/MM/YYYY HH:mm A").toDate();
+                    var end = moment($('#txtEnd').val(), "DD/MM/YYYY HH:mm A").toDate();
+                    if (start > end) {
+                        alert('Invalid end date');
+                        return;
+                    }
+                }
+
+                var data = {
+                    EventId: $('#hdEventId').val(),
+                    Subject: $('#txtSubject').val().trim(),
+                    TimeStart: $('#txtStart').val().trim(),
+                    TimeEnd: $('#chkIsFullDay').is(':checked') ? null : $('#txtEnd').val().trim(),
+                    Description: $('#txtDescription').val().trim(),
+                    ThemeColor: $('#ddThemeColor').val(),
+                    IsFullDay: $('#chkISFullDay').is(':checked')
+                }
+
+                if ($('#chkIsFullDay').is(':checked')) {
+                    data.IsFullDay = true;
+                } else {
+                    data.IsFullDay = false;
+                }
+                //call function for submit data to the server
+
+                SaveData(data);
+
+            })
+            // saving Data
+            function SaveData(data) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/Home/SaveEvent',
+                    data: data,
+                    success: function (data) {
+                        if (data.status) {
+
+                            console.log('success');
+                            // refresh the callendar
+                            FetchEvetAndRenderCalendar();
+                            $('#myModelSave').modal('hide');
+                            $('#myModel').modal('hide');
+                        }
+                    },
+                    error: function () {
+                        alert('Failed');
+                    }
+                })
+            }
+
+        });
 
     </script>
-    
+
 }

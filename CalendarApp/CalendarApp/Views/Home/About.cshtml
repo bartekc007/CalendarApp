@@ -1,7 +1,15 @@
-﻿@{
+﻿@model IEnumerable<CalendarApp.Models.Event>
+@{
     ViewBag.Title = "About";
 }
 <h2>@ViewBag.Title.</h2>
 <h3>@ViewBag.Message</h3>
+
+ 
+    @foreach (var item in Model)
+    {
+        Console.WriteLine(item.ToString());
+    }
+
 
 <p>Use this area to provide additional information.</p>
