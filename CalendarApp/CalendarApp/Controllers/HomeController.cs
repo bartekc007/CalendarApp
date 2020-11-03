@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using CalendarApp.Models;
+using Microsoft.AspNet.Identity;
 
 namespace CalendarApp.Controllers
 {
@@ -17,12 +18,8 @@ namespace CalendarApp.Controllers
 
         public ActionResult About()
         {
-            _context = new ApplicationDbContext();
-            ViewBag.Message = "Your application description page.";
-            List<Event> events = _context.Events.ToList();
 
-
-            return View(events);
+            return View();
         }
 
         public ActionResult Contact()
@@ -35,8 +32,9 @@ namespace CalendarApp.Controllers
         public JsonResult GetEvents()
         {
             _context = new ApplicationDbContext();
+            string userID = User.Identity.GetUserId();
 
-            var events = _context.Events.ToList();
+            var events = _context.Events.Where(e=>e.UserID==userID);
             return new JsonResult { Data = events, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
@@ -58,10 +56,13 @@ namespace CalendarApp.Controllers
                     model.TimeStart = e.TimeStart;
                     model.TimeEnd = e.TimeEnd;
                     model.IsFullDay = e.IsFullDay;
+                    model.IsPublic = e.IsPublic;
+                    model.UserID = e.UserID;
                 }
             }
             else
             {
+                e.UserID = User.Identity.GetUserId();
                 _context.Events.Add(e);
             }
 

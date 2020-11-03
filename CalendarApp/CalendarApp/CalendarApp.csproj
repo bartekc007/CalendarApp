@@ -185,6 +185,14 @@
     <Compile Include="Migrations\202010141541114_AddingSomeEventsToDbContext.Designer.cs">
       <DependentUpon>202010141541114_AddingSomeEventsToDbContext.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202010291235286_AddingUserIdToEventTable.cs" />
+    <Compile Include="Migrations\202010291235286_AddingUserIdToEventTable.Designer.cs">
+      <DependentUpon>202010291235286_AddingUserIdToEventTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202011030851103_EndTimeEventCanBeNull.cs" />
+    <Compile Include="Migrations\202011030851103_EndTimeEventCanBeNull.Designer.cs">
+      <DependentUpon>202011030851103_EndTimeEventCanBeNull.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Event.cs" />
@@ -536,6 +544,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202010141541114_AddingSomeEventsToDbContext.resx">
       <DependentUpon>202010141541114_AddingSomeEventsToDbContext.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202010291235286_AddingUserIdToEventTable.resx">
+      <DependentUpon>202010291235286_AddingUserIdToEventTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202011030851103_EndTimeEventCanBeNull.resx">
+      <DependentUpon>202011030851103_EndTimeEventCanBeNull.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

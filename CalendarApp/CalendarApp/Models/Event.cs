@@ -21,12 +21,16 @@ namespace CalendarApp.Models
 
         [Required]
         public DateTime TimeStart { get; set; }
-        public DateTime TimeEnd { get; set; }
+        public DateTime? TimeEnd { get; set; }
 
         [Required]
         public bool IsFullDay {get;set;}
 
         [Required]
         public string ThemeColor { get; set; }
+        [Required]
+        public string UserID { get; set; }
+        [Required]
+        public bool IsPublic { get; set; }
     }
 }

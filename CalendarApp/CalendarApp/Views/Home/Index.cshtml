@@ -38,6 +38,7 @@
             <div class="modal-body">
                 <form class="col-md-12 form-horizontal">
                     <input type="hidden" id="hdEventId" value="0" />
+                    <input type="hidden" id="hdUserId" value="0" />
                     <div class="form-group">
                         <label>Subject</label>
                         <input type="text" id="txtSubject" class="form-control" />
@@ -77,8 +78,12 @@
                             <option value="blue">Blue</option>
                             <option value="black">Black</option>
                             <option value="green">Green</option>
-
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label><input type="checkbox" id="chkIsPublic" checked="checked" /> Public Event </label>
+                        </div>
                     </div>
                     <button type="button" id="btnSave" class="btn btn-success">Save</button>
                 </form>
@@ -113,7 +118,9 @@
                                 start: moment(v.TimeStart),
                                 end: v.TimeEnd != null ? moment(v.TimeEnd) : null,
                                 color: v.ThemeColor,
-                                allDay: v.IsFullDay
+                                allDay: v.IsFullDay,
+                                isPublic: v.IsPublic,
+                                userId: v.UserID
                             });
                         })
                         GenerateCalendar(events);
@@ -159,7 +166,9 @@
                             start: start,
                             end: end,
                             allDay: false,
-                            color: ''
+                            color: '',
+                            isPublic: false
+                            
                         }
                         openAddEditForm();
                         $('#calendar').fullCalendar('unselect');
@@ -168,13 +177,16 @@
                     eventDrop: function (event) {
                         var data = {
                             EventId: event.eventId,
+                            UserID: event.userId,
                             Subject: event.title,
                             TimeStart: event.start.format('DD/MM/YYYY HH:mm A'),
                             TimeEnd: event.end != null ? event.start.format('DD/MM/YYYY HH:mm A') : null ,
                             Description: event.description,
                             ThemeColor: event.color,
-                            IsFullDay: event.allDay
+                            IsFullDay: event.allDay,
+                            IsPublic: event.isPublic
                         }
+                        SaveData(data);
                     }
                 })
             }
@@ -182,6 +194,7 @@
             $('#btnEdit').click(function () {
                 // Open model dialog for edit button
                 openAddEditForm();
+                
             })
 
             $('#btnDelete').click(function () {
@@ -219,6 +232,7 @@
             function openAddEditForm() {
                 if (selectedEvent != null) {
                     $('#hdEventId').val(selectedEvent.eventId);
+                    $('#hdUserId').val(selectedEvent.userId);
                     $('#txtSubject').val(selectedEvent.title);
                     $('#txtStart').val(selectedEvent.start.format('DD/MM/YYYY HH:mm A'));
                     $('#chkIsFullDay').prop("checked", selectedEvent.allDay || false);
@@ -226,6 +240,7 @@
                     $('#txtEnd').val(selectedEvent.end != null ? selectedEvent.end.format('DD/MM/YYYY HH:mm A') : '');
                     $('#txtDescription').val(selectedEvent.description);
                     $('#ddThemeColor').val(selectedEvent.color);
+                    $('#chkIsPublic').val(selectedEvent.isPublic);
                 }
 
                 $('#MyModel').modal('hide');
@@ -261,18 +276,26 @@
 
                 var data = {
                     EventId: $('#hdEventId').val(),
+                    UserID: $('#hdUserId').val(),
                     Subject: $('#txtSubject').val().trim(),
                     TimeStart: $('#txtStart').val().trim(),
                     TimeEnd: $('#chkIsFullDay').is(':checked') ? null : $('#txtEnd').val().trim(),
                     Description: $('#txtDescription').val().trim(),
                     ThemeColor: $('#ddThemeColor').val(),
-                    IsFullDay: $('#chkISFullDay').is(':checked')
+                    //IsPublic: $('#chkIsPublic').val().trim()
+                    
                 }
 
                 if ($('#chkIsFullDay').is(':checked')) {
                     data.IsFullDay = true;
                 } else {
                     data.IsFullDay = false;
+                }
+
+                if ($('#chkIsPublic').is(':checked')) {
+                    data.IsPublic = true;
+                } else {
+                    data.IsPublic = false;
                 }
                 //call function for submit data to the server
 
