@@ -1,45 +1,32 @@
-﻿using System;
+﻿using CalendarApp.Models;
+using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using System.Web.Http.Results;
 using System.Web.Mvc;
-using CalendarApp.Models;
-using Microsoft.AspNet.Identity;
 
-namespace CalendarApp.Controllers
+namespace CalendarApp.Controllers.Api
 {
-    [Authorize(Roles = "User")]
-    public class HomeController : Controller
+    public class CalendarController : ApiController
     {
         private ApplicationDbContext _context;
-        public ActionResult Index()
-        {
-            return View();
-        }
 
-        public ActionResult About()
-        {
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
-
+        //GET /api/calendar
         public JsonResult GetEvents()
         {
             _context = new ApplicationDbContext();
             string userID = User.Identity.GetUserId();
 
-            var events = _context.Events.Where(e=>e.UserID==userID);
+            var events = _context.Events.Where(e => e.UserID == userID);
             return new JsonResult { Data = events, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        [HttpPost]
+        //POST /api/calendar
+        [System.Web.Http.HttpPost]
         public JsonResult SaveEvent(Event e)
         {
             var status = false;
@@ -73,7 +60,8 @@ namespace CalendarApp.Controllers
             return new JsonResult { Data = new { status = status } };
         }
 
-        [HttpPost]
+        //DELETE /api/customers/1
+        [System.Web.Http.HttpDelete]
         public JsonResult DeleteEvent(int eventId)
         {
             var status = false;
@@ -89,5 +77,6 @@ namespace CalendarApp.Controllers
 
             return new JsonResult { Data = new { status = status } };
         }
+
     }
 }

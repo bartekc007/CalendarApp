@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using CalendarApp.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace CalendarApp.Controllers
 {
@@ -155,6 +156,15 @@ namespace CalendarApp.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    // Temp Code
+
+                    /*var roleStore = new RoleStore<IdentityRole>(new ApplicationDbContext());
+                    var roleManager = new RoleManager<IdentityRole>(roleStore);
+                    roleManager.CreateAsync(new IdentityRole("User"));*/
+                    await UserManager.AddToRoleAsync(user.Id,"User");
+
+
+
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771

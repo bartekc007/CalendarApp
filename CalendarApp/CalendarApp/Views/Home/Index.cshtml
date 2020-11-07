@@ -106,9 +106,9 @@
             FetchEvetAndRenderCalendar();
             function FetchEvetAndRenderCalendar() {
                 events = [];
-                $.ajax({
-                    type: "GET",
-                    url: "/home/GetEvents",
+                $.ajax({                    
+                    url: "/Home/GetEvents",
+                    method: "GET",
                     success: function (data) {
                         $.each(data, function (i, v) {
                             events.push({
@@ -200,8 +200,8 @@
             $('#btnDelete').click(function () {
                 if (selectedEvent != null && confirm('Are you sure?')) {
                     $.ajax({
-                        type: "POST",
-                        url: "/Home/DeleteEvent",
+                        type: "DELETE",
+                        url: "/Home/Delete/Event",
                         data: { 'eventId': selectedEvent.eventId },
                         success: function (data) {
                             if (data.status) {
