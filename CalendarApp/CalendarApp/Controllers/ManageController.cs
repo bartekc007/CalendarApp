@@ -10,7 +10,7 @@ using CalendarApp.Models;
 
 namespace CalendarApp.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class ManageController : Controller
     {
         private ApplicationSignInManager _signInManager;

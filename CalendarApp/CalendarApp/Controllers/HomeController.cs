@@ -8,7 +8,7 @@ using Microsoft.AspNet.Identity;
 
 namespace CalendarApp.Controllers
 {
-    [Authorize(Roles = "User")]
+    //[Authorize(Roles = "User")]
     public class HomeController : Controller
     {
         private ApplicationDbContext _context;

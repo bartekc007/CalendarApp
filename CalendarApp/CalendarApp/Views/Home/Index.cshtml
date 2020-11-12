@@ -107,9 +107,11 @@
             function FetchEvetAndRenderCalendar() {
                 events = [];
                 $.ajax({                    
-                    url: "/Home/GetEvents",
+                    //url: "/Home/GetEvents",
+                    url: "/api/Events",
                     method: "GET",
                     success: function (data) {
+                        console.log(data);
                         $.each(data, function (i, v) {
                             events.push({
                                 eventId: v.EventId,
@@ -201,10 +203,11 @@
                 if (selectedEvent != null && confirm('Are you sure?')) {
                     $.ajax({
                         type: "DELETE",
-                        url: "/Home/Delete/Event",
-                        data: { 'eventId': selectedEvent.eventId },
+                        url: "/api/Events/" + selectedEvent.eventId,
+                        //data: { 'eventId': selectedEvent.eventId },
                         success: function (data) {
-                            if (data.status) {
+                            console.log(data.Data);
+                            if (data.Data.status) {
                                 // refresh the callendar
                                 FetchEvetAndRenderCalendar();
                                 $('#myModel ').modal('hide');
@@ -304,13 +307,34 @@
             })
             // saving Data
             function SaveData(data) {
+                @*if (data.EventId > 0) {
+                    $.ajax({
+                        type: 'PUT',
+                        url: '/api/Events/' + selectedEvent.eventId,
+                        data: data,
+                        success: function (data) {
+                            console.log(data);
+                            if (data.status) {
+
+                                console.log('success jebanego PUTa');
+                                // refresh the callendar
+                                FetchEvetAndRenderCalendar();
+                                $('#myModelSave').modal('hide');
+                                $('#myModel').modal('hide');
+                            }
+                        },
+                        error: function () {
+                            alert('Failed');
+                        }
+                    })
+                }*@
                 $.ajax({
                     type: 'POST',
                     url: '/Home/SaveEvent',
                     data: data,
                     success: function (data) {
                         if (data.status) {
-
+                            console.log(data);
                             console.log('success');
                             // refresh the callendar
                             FetchEvetAndRenderCalendar();
