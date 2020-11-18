@@ -21,6 +21,10 @@ namespace CalendarApp.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Event> Events { get; set; }
+        public DbSet<EventMembers> EventMembers { get; set; }
+        public DbSet<Friendship> Friendships { get; set; }
+        public DbSet<UserFriendshipRequestSender> UserFriendshipRequestSenders { get; set; }
+        public DbSet<EventRequestSender> EventRequestSenders { get; set; }
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
@@ -30,6 +34,20 @@ namespace CalendarApp.Models
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
+        }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Event>().HasKey(c => new { c.EventId });
+
+            modelBuilder.Entity<EventMembers>().HasKey(c => new { c.UserID, c.EventID });
+
+            modelBuilder.Entity<Friendship>().HasKey(c => new { c.FriendshipId });
+
+            modelBuilder.Entity<UserFriendshipRequestSender>().HasKey(c => new { c.UserId, c.Person2Id });
+
+            modelBuilder.Entity<EventRequestSender>().HasKey(c => new { c.EventId, c.UserId });
         }
     }
 }

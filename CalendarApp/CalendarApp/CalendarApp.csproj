@@ -213,11 +213,31 @@
     <Compile Include="Migrations\202011071839217_SeedUserRole.Designer.cs">
       <DependentUpon>202011071839217_SeedUserRole.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202011181720300_AddingEventMembers.cs" />
+    <Compile Include="Migrations\202011181720300_AddingEventMembers.Designer.cs">
+      <DependentUpon>202011181720300_AddingEventMembers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202011181721168_AddingFriendships.cs" />
+    <Compile Include="Migrations\202011181721168_AddingFriendships.Designer.cs">
+      <DependentUpon>202011181721168_AddingFriendships.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202011181721547_AddingUserFriendshipRequestSender.cs" />
+    <Compile Include="Migrations\202011181721547_AddingUserFriendshipRequestSender.Designer.cs">
+      <DependentUpon>202011181721547_AddingUserFriendshipRequestSender.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202011181722341_AddingEventRequestSender.cs" />
+    <Compile Include="Migrations\202011181722341_AddingEventRequestSender.Designer.cs">
+      <DependentUpon>202011181722341_AddingEventRequestSender.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Event.cs" />
+    <Compile Include="Models\EventMembers.cs" />
+    <Compile Include="Models\EventRequestSender.cs" />
+    <Compile Include="Models\Friendship.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\UserFriendshipRequestSender.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -577,6 +597,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202011071839217_SeedUserRole.resx">
       <DependentUpon>202011071839217_SeedUserRole.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202011181720300_AddingEventMembers.resx">
+      <DependentUpon>202011181720300_AddingEventMembers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202011181721168_AddingFriendships.resx">
+      <DependentUpon>202011181721168_AddingFriendships.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202011181721547_AddingUserFriendshipRequestSender.resx">
+      <DependentUpon>202011181721547_AddingUserFriendshipRequestSender.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202011181722341_AddingEventRequestSender.resx">
+      <DependentUpon>202011181722341_AddingEventRequestSender.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
