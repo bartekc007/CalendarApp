@@ -54,9 +54,9 @@ namespace CalendarApp
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+            app.UseFacebookAuthentication(
+               appId: "118319156591613",
+               appSecret: "8a46fa898ea19399362c32df9f7fc1fc");
 
             //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             //{
