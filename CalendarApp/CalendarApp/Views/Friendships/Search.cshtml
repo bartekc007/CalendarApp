@@ -1,0 +1,74 @@
+﻿@model List<CalendarApp.DTO.UserDTO>
+
+@{
+    ViewBag.Title = "Search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Search</h2>
+
+
+@if (Model.Any())
+{
+   
+<table class="table">
+
+    <tr>
+        <th>
+            User Name
+        </th>
+        <th>
+
+        </th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+
+        bool flag = false;
+        <tr>
+            <td>
+                @item.UserName`
+            </td>
+            <td>
+
+                @foreach (var friend in item.friendsID)
+                {
+                    if (friend == item.Id)
+                    {
+                        flag = true;
+                        break;
+                    }
+                    else
+                    {
+                        flag = false;
+                    }
+                }
+                @if (flag == false)
+                {
+                    <button>
+                        @Html.ActionLink("Add Friend", "SendRequest", "Friendships",
+                        new
+                            {
+                            Id = item.Id,
+                            UserName = item.UserName
+                        }, null)
+                    </button>
+                }
+
+            </td>
+        </tr>
+    }
+</table>
+}
+else
+{
+    <div class="card">
+        <div class="card-header">
+            No users created yet
+        </div>
+    </div>
+}
+
+
+

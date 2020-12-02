@@ -1,0 +1,43 @@
+﻿@model CalendarApp.Models.Friendship
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Friendship</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Person1Id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Person1Id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Person2Id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Person2Id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.isBlocked)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.isBlocked)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.FriendshipId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
