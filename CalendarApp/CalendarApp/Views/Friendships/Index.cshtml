@@ -24,23 +24,64 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Person1Id)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Person2Id)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.isBlocked)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.FriendshipId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.FriendshipId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.FriendshipId })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Person1Id)
+                <label><input type="text" id="hdUserId" checked="checked" />@item.Person1Id </label>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.isBlocked)
+            </td>
+            @*<td>
+                    @Html.ActionLink("Edit", "Edit", new { id=item.FriendshipId }) |
+                    @Html.ActionLink("Details", "Details", new { id=item.FriendshipId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id=item.FriendshipId })
+                </td>*@
+            <td>
+                <button type="button" id="btnAddFriends" class="btn">Invite Friend</button>
+            </td>
+        </tr>
+    }
 
 </table>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+
+            $('#btnAddFriends').click(function () {
+
+                var data {
+                    EventId: ,
+                    UserId: $('#hdUserId').val(),
+                }
+                // Redirect to new page
+                SendInvitationRequest(data);
+
+            })
+
+            function SendInvitationRequest(data) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'EventRequestSenders/Create',
+                    data: data,
+                    success: function (data) {
+                        if (data.status) {
+                            console.log(data);
+                            console.log('success');
+
+                            // refresh FriendsList
+                            
+                        }
+                    },
+                    error: function () {
+                        alert('Failed');
+                    }
+                })
+            }
+
+
+        }
+    </script>

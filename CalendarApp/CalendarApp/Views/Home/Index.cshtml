@@ -85,6 +85,9 @@
                             <label><input type="checkbox" id="chkIsPublic" checked="checked" /> Public Event </label>
                         </div>
                     </div>
+                    <button type="button" id="btnAddFriends" class="btn"> Invite Friends
+                        @*@Html.ActionLink("Invite Friends", "ListFriendEventInvitations", "EventFriends")*@
+                    </button>
                     <button type="button" id="btnSave" class="btn btn-success">Save</button>
                 </form>
                 <p id="pDetails"></p>
@@ -305,6 +308,7 @@
                 SaveData(data);
 
             })
+
             // saving Data
             function SaveData(data) {
                 @*if (data.EventId > 0) {

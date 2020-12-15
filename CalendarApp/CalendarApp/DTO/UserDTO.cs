@@ -13,6 +13,7 @@ namespace CalendarApp.DTO
         public string UserName { get; set; }
         public UserDTO() { }
         public List<string> friendsID { get; set; }
+        public string EventId { get; set; }
         public UserDTO(string id, string username,List<string> friendsId)
         {
             this.Id = id;

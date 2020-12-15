@@ -182,10 +182,14 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\EventFriendsController.cs" />
+    <Compile Include="Controllers\EventMembersController.cs" />
+    <Compile Include="Controllers\EventRequestSendersController.cs" />
     <Compile Include="Controllers\EventsController.cs" />
     <Compile Include="Controllers\FriendshipsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="DTO\EventMemberRequestDTO.cs" />
     <Compile Include="DTO\UserDTO.cs" />
     <Compile Include="DTO\UserFriendshipRequestSenderDTO.cs" />
     <Compile Include="Global.asax.cs">
@@ -572,6 +576,8 @@
     <Content Include="Views\Friendships\Index.cshtml" />
     <Content Include="Views\Friendships\Search.cshtml" />
     <Content Include="Views\Friendships\FriendshipRequests.cshtml" />
+    <Content Include="Views\Home\AddFriendEvent.cshtml" />
+    <Content Include="Views\EventFriends\ListFriendEventInvitations.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -22,6 +22,7 @@ namespace CalendarApp.Controllers
             return View(_context.Friendships.ToList());
         }
 
+
         // GET: Friendships/Details/5
         public ActionResult Details(int? id)
         {
@@ -44,8 +45,6 @@ namespace CalendarApp.Controllers
         }
 
         // POST: Friendships/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "FriendshipId,Person1Id,Person2Id,isBlocked")] Friendship friendship)
@@ -76,8 +75,6 @@ namespace CalendarApp.Controllers
         }
 
         // POST: Friendships/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "FriendshipId,Person1Id,Person2Id,isBlocked")] Friendship friendship)
@@ -126,7 +123,6 @@ namespace CalendarApp.Controllers
             base.Dispose(disposing);
         }
 
-        
         public ActionResult Search()
         {
             _context = new ApplicationDbContext();
