@@ -182,11 +182,13 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\api\FriendshipsController.cs" />
+    <Compile Include="Controllers\api\UserFriendshipRequestSendersController.cs" />
     <Compile Include="Controllers\EventFriendsController.cs" />
-    <Compile Include="Controllers\EventMembersController.cs" />
-    <Compile Include="Controllers\EventRequestSendersController.cs" />
+    <Compile Include="Controllers\api\EventMembersController.cs" />
+    <Compile Include="Controllers\api\EventRequestSendersController.cs" />
     <Compile Include="Controllers\EventsController.cs" />
-    <Compile Include="Controllers\FriendshipsController.cs" />
+    <Compile Include="Controllers\FriendshipController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="DTO\EventMemberRequestDTO.cs" />
@@ -238,6 +240,10 @@
     <Compile Include="Migrations\202011181722341_AddingEventRequestSender.cs" />
     <Compile Include="Migrations\202011181722341_AddingEventRequestSender.Designer.cs">
       <DependentUpon>202011181722341_AddingEventRequestSender.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202012161618500_PrimaryKeyChanges.cs" />
+    <Compile Include="Migrations\202012161618500_PrimaryKeyChanges.Designer.cs">
+      <DependentUpon>202012161618500_PrimaryKeyChanges.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -628,6 +634,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202011181722341_AddingEventRequestSender.resx">
       <DependentUpon>202011181722341_AddingEventRequestSender.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202012161618500_PrimaryKeyChanges.resx">
+      <DependentUpon>202012161618500_PrimaryKeyChanges.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

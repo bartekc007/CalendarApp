@@ -8,6 +8,9 @@ namespace CalendarApp.Models
 {
     public class EventRequestSender
     {
+        [Key]
+        [Required]
+        public int EventRequestSenderId { get; set; }
         [Required]
         public int EventId { get; set; }
 

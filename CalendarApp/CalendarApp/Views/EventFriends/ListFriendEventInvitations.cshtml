@@ -37,6 +37,7 @@
                     @Html.ActionLink("Accept", "GetInvitation", "EventFriends",
                     new
                     {
+                        EventMemberRequestId = item.EventMemberRequestId,
                         EventID = item.EventID,
                         UserName = item.UserName,
                         UserId = item.UserId,
@@ -49,6 +50,7 @@
                     @Html.ActionLink("Delete", "GetInvitation", "EventFriends",
                     new
                     {
+                        EventMemberRequestId = item.EventMemberRequestId,
                         EventID = item.EventID,
                         UserName = item.UserName,
                         UserId = item.UserId,
@@ -63,7 +65,7 @@ else
 {
     <div class="card">
         <div class="card-header">
-            No users created yet
+            No Invitations
         </div>
     </div>
 }

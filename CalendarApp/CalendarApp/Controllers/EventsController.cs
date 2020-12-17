@@ -30,8 +30,6 @@ namespace CalendarApp.Controllers
             return Ok(events);
         }
 
-
-
         // GET: api/Events/5
         [System.Web.Http.HttpGet]
         public async Task<IHttpActionResult> GetEvent(int id)

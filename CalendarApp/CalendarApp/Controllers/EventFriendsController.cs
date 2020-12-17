@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using CalendarApp.Controllers.api;
 
 namespace CalendarApp.Controllers
 {
@@ -30,6 +31,7 @@ namespace CalendarApp.Controllers
             EventMemberRequestDTO Emrd = new EventMemberRequestDTO();
             foreach (var item in invitations)
             {
+                Emrd.EventMemberRequestId = item.EventRequestSenderId;
                 Emrd.EventID = item.EventId;
                 Emrd.UserId = item.UserId;
                 Emrd.UserName = _context.Users.Where(u => u.Id == item.UserId).Select(u => u.UserName).First();
@@ -49,11 +51,11 @@ namespace CalendarApp.Controllers
                 eventMember.EventID = Emrd.EventID;
                 eventMember.UserID = Emrd.UserId;
                 await _eventMembersController.PostEventMembers(eventMember);
-                await _eventRequestSendersController.DeleteEventRequestSender(Emrd.EventID, Emrd.UserId);
+                await _eventRequestSendersController.DeleteEventRequestSender(Emrd.EventMemberRequestId);
             }
             else
             {
-                await _eventRequestSendersController.DeleteEventRequestSender(Emrd.EventID, Emrd.UserId);
+                await _eventRequestSendersController.DeleteEventRequestSender(Emrd.EventMemberRequestId);
             }
             return RedirectToAction("ListFriendEventInvitations");
         }

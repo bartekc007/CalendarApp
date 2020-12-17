@@ -7,6 +7,7 @@ namespace CalendarApp.DTO
 {
     public class EventMemberRequestDTO
     {
+        public int EventMemberRequestId { get; set; }
         public int EventID { get; set; }
         public string UserName { get; set; }
         public string UserId { get; set; }

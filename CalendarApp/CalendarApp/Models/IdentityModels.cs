@@ -41,13 +41,13 @@ namespace CalendarApp.Models
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Event>().HasKey(c => new { c.EventId });
 
-            modelBuilder.Entity<EventMembers>().HasKey(c => new { c.UserID, c.EventID });
+            modelBuilder.Entity<EventMembers>().HasKey(c => new { c.EventMembersId });
 
             modelBuilder.Entity<Friendship>().HasKey(c => new { c.FriendshipId });
 
-            modelBuilder.Entity<UserFriendshipRequestSender>().HasKey(c => new { c.UserId, c.Person2Id });
+            modelBuilder.Entity<UserFriendshipRequestSender>().HasKey(c => new { c.UserFriendshipRequestSenderId});
 
-            modelBuilder.Entity<EventRequestSender>().HasKey(c => new { c.EventId, c.UserId });
+            modelBuilder.Entity<EventRequestSender>().HasKey(c => new { c.EventRequestSenderId});
         }
     }
 }

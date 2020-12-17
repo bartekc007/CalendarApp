@@ -11,7 +11,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using CalendarApp.Models;
 
-namespace CalendarApp.Controllers
+namespace CalendarApp.Controllers.api
 {
     public class EventMembersController : ApiController
     {
@@ -25,9 +25,9 @@ namespace CalendarApp.Controllers
 
         // GET: api/EventMembers/5
         [ResponseType(typeof(EventMembers))]
-        public async Task<IHttpActionResult> GetEventMembers(string id)
+        public async Task<IHttpActionResult> GetEventMembers(int id)
         {
-            EventMembers eventMembers = await db.EventMembers.FindAsync(id);
+            EventMembers eventMembers = await db.EventMembers.Where(e=>e.EventMembersId==id).FirstAsync();
             if (eventMembers == null)
             {
                 return NotFound();
@@ -38,14 +38,14 @@ namespace CalendarApp.Controllers
 
         // PUT: api/EventMembers/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutEventMembers(string id, EventMembers eventMembers)
+        public async Task<IHttpActionResult> PutEventMembers(int id, EventMembers eventMembers)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != eventMembers.UserID)
+            if (id != eventMembers.EventMembersId)
             {
                 return BadRequest();
             }
@@ -88,7 +88,7 @@ namespace CalendarApp.Controllers
             }
             catch (DbUpdateException)
             {
-                if (EventMembersExists(eventMembers.UserID))
+                if (EventMembersExists(eventMembers.EventMembersId))
                 {
                     return Conflict();
                 }
@@ -103,7 +103,7 @@ namespace CalendarApp.Controllers
 
         // DELETE: api/EventMembers/5
         [ResponseType(typeof(EventMembers))]
-        public async Task<IHttpActionResult> DeleteEventMembers(string id)
+        public async Task<IHttpActionResult> DeleteEventMembers(int id)
         {
             EventMembers eventMembers = await db.EventMembers.FindAsync(id);
             if (eventMembers == null)
@@ -126,9 +126,9 @@ namespace CalendarApp.Controllers
             base.Dispose(disposing);
         }
 
-        private bool EventMembersExists(string id)
+        private bool EventMembersExists(int id)
         {
-            return db.EventMembers.Count(e => e.UserID == id) > 0;
+            return db.EventMembers.Count(e => e.EventMembersId == id) > 0;
         }
     }
 }

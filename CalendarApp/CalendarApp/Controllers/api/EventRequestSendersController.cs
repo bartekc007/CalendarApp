@@ -14,7 +14,7 @@ using CalendarApp.DTO;
 using CalendarApp.Models;
 using Microsoft.AspNet.Identity;
 
-namespace CalendarApp.Controllers
+namespace CalendarApp.Controllers.api
 {
     public class EventRequestSendersController : ApiController
     {
@@ -48,7 +48,7 @@ namespace CalendarApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (id != eventRequestSender.EventId)
+            if (id != eventRequestSender.EventRequestSenderId)
             {
                 return BadRequest();
             }
@@ -92,7 +92,7 @@ namespace CalendarApp.Controllers
             }
             catch (DbUpdateException)
             {
-                if (EventRequestSenderExists(eventRequestSender.EventId))
+                if (EventRequestSenderExists(eventRequestSender.EventRequestSenderId))
                 {
                     return Conflict();
                 }
@@ -108,9 +108,10 @@ namespace CalendarApp.Controllers
         // DELETE: api/EventRequestSenders/5
         [System.Web.Http.HttpDelete]
         [ResponseType(typeof(EventRequestSender))]
-        public async Task<IHttpActionResult> DeleteEventRequestSender(int id,string userId)
+        public async Task<IHttpActionResult> DeleteEventRequestSender(int id)
         {
-            EventRequestSender eventRequestSender = await _context.EventRequestSenders.Where(e=>e.EventId==id && e.UserId == userId).FirstAsync();
+
+            EventRequestSender eventRequestSender = await _context.EventRequestSenders.Where(e=>e.EventRequestSenderId==id).FirstAsync();
             if (eventRequestSender == null)
             {
                 return NotFound();
@@ -133,7 +134,7 @@ namespace CalendarApp.Controllers
 
         private bool EventRequestSenderExists(int id)
         {
-            return _context.EventRequestSenders.Count(e => e.EventId == id) > 0;
+            return _context.EventRequestSenders.Count(e => e.EventRequestSenderId == id) > 0;
         }
 
         

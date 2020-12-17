@@ -8,6 +8,9 @@ namespace CalendarApp.Models
 {
     public class EventMembers
     {
+        [Key]
+        [Required]
+        public int EventMembersId { get; set; }
         [Required]
         public string UserID { get; set; }
 

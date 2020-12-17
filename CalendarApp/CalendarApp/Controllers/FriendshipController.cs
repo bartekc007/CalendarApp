@@ -9,12 +9,18 @@ using System.Web.Mvc;
 using CalendarApp.DTO;
 using CalendarApp.Models;
 using Microsoft.AspNet.Identity;
+using CalendarApp.Controllers.api;
+using System.Threading.Tasks;
 
 namespace CalendarApp.Controllers
 {
-    public class FriendshipsController : Controller
+    public class FriendshipController : Controller
     {
-        private ApplicationDbContext _context = new ApplicationDbContext();
+        api.FriendshipsController _friendshipsController = new api.FriendshipsController();
+        api.UserFriendshipRequestSendersController _userFriendshipRequestSendersController = new api.UserFriendshipRequestSendersController();
+
+        #region delete
+        /*private ApplicationDbContext _context = new ApplicationDbContext();
 
         // GET: Friendships
         public ActionResult Index()
@@ -121,53 +127,41 @@ namespace CalendarApp.Controllers
                 _context.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        public ActionResult Search()
+        }*/
+        #endregion
+        public async Task<ActionResult> Search()
         {
-            _context = new ApplicationDbContext();
             string userId = User.Identity.GetUserId();
-            var AppUsers = _context.Users.Where(u => u.Id != userId).ToList();
-            List<Friendship> friends = new List<Friendship>();
-            List<string> friendsIds = new List<string>();
-
-            List<UserDTO> users = new List<UserDTO>();
-            foreach (var user in AppUsers)
-            {
-                friends = _context.Friendships.Where(f => f.Person1Id == userId || f.Person2Id == userId).ToList();
-                foreach (var item in friends)
-                {
-                    if (item.Person1Id == userId)
-                        friendsIds.Add(item.Person2Id);
-                    else
-                        friendsIds.Add(item.Person1Id);
-                }
-                var userDTO = new UserDTO(user.Id, user.UserName,friendsIds);
-                users.Add(userDTO);
-            }
+            var users = await _friendshipsController.GetFriendship(userId);
             return View(users);
         }
         public ActionResult SendRequest(UserDTO user)
         {
-            _context = new ApplicationDbContext();
             string thisUserId = User.Identity.GetUserId();
             UserFriendshipRequestSender ufrs = new UserFriendshipRequestSender();
             ufrs.UserId = thisUserId;
             ufrs.Person2Id = user.Id;
-            _context.UserFriendshipRequestSenders.Add(ufrs);
-            _context.SaveChanges();
+            if(!AreTheyFriends(ufrs))
+            {
+                if(!_userFriendshipRequestSendersController.SentFriendRequest(ufrs))
+                {
+                    _userFriendshipRequestSendersController.PostUserFriendshipRequestSender(ufrs);
+                }
+            }
+            
             return RedirectToAction("Search");
         }
 
-        public ActionResult FriendshipRequests()
+        public async Task<ActionResult> FriendshipRequests()
         {
+            
             string userId = User.Identity.GetUserId();
-            var requests = _context.UserFriendshipRequestSenders.Where(f => f.Person2Id == userId).ToList();
+            var requests = await _userFriendshipRequestSendersController.GetUserFriendshipRequestSender(userId);
             List<UserFriendshipRequestSenderDTO> data = new List<UserFriendshipRequestSenderDTO>();
             UserFriendshipRequestSenderDTO objectDTO = new UserFriendshipRequestSenderDTO();
             foreach (var item in requests)
             {
-                objectDTO.Person2Name = _context.Users.Where(u => u.Id == item.UserId).Select(u => u.UserName).FirstOrDefault();
+                objectDTO.Person2Name = await _friendshipsController.GetUserName(item.UserId);
                 objectDTO.UserId = item.Person2Id;
                 objectDTO.Person2Id = item.UserId;
                 objectDTO.IsAccepetd = false;
@@ -177,9 +171,9 @@ namespace CalendarApp.Controllers
             return View(data);
         }
 
-        public ActionResult AddFriend(UserFriendshipRequestSenderDTO objectDTO)
+        public async Task<ActionResult> AddFriend(UserFriendshipRequestSenderDTO objectDTO)
         {
-            _context = new ApplicationDbContext();
+            
             string thisUserId = User.Identity.GetUserId();
             Friendship friendship = new Friendship();
             if(objectDTO.IsAccepetd == true)
@@ -187,20 +181,31 @@ namespace CalendarApp.Controllers
                 friendship.Person1Id = thisUserId;
                 friendship.Person2Id = objectDTO.Person2Id;
                 friendship.isBlocked = false;
-                _context.Friendships.Add(friendship);
+                _friendshipsController.PostFriendship(friendship);
 
-                var request = _context.UserFriendshipRequestSenders.Where(r => (r.UserId == thisUserId && r.Person2Id == objectDTO.Person2Id) || (r.UserId == objectDTO.Person2Id && r.Person2Id == thisUserId)).FirstOrDefault();
-                if (request != null)
-                    _context.UserFriendshipRequestSenders.Remove(request);
+                if (!_userFriendshipRequestSendersController.SentFriendRequest(new UserFriendshipRequestSender() { UserId = friendship.Person1Id, Person2Id = friendship.Person2Id }))
+                {
+                    await _friendshipsController.PostFriendship(friendship);
+                    _userFriendshipRequestSendersController.DeleteUserFriendRequestSenderByUsersIds(friendship.Person1Id, friendship.Person2Id);
+                }     
             }
             else
             {
-                var request = _context.UserFriendshipRequestSenders.Where(r => (r.UserId == thisUserId && r.Person2Id == objectDTO.Person2Id) || (r.UserId == objectDTO.Person2Id && r.Person2Id == thisUserId)).FirstOrDefault();
-                if (request != null)
-                    _context.UserFriendshipRequestSenders.Remove(request);
+                if (!_userFriendshipRequestSendersController.SentFriendRequest(new UserFriendshipRequestSender() { UserId = friendship.Person1Id, Person2Id = friendship.Person2Id })) ;
+                    
+                
             }
-            _context.SaveChanges();
             return RedirectToAction("Search");
+        }
+
+        public bool AreTheyFriends(UserFriendshipRequestSender ufrs)
+        {
+            ApplicationDbContext _context = new ApplicationDbContext();
+            if (!_context.Friendships.Where(u => u.Person1Id == ufrs.UserId && u.Person2Id == ufrs.Person2Id).Any()
+                && !_context.Friendships.Where(u => u.Person1Id == ufrs.Person2Id && u.Person2Id == ufrs.UserId).Any())
+                return false;
+            else
+                return true;
         }
     }
 }
