@@ -41,6 +41,21 @@ namespace CalendarAppWebaPI.Controllers
             return friendship;
         }
 
+        // GET: api/Friendships/AreTheyFriends/5/10
+        [HttpGet("AreTheyFriends/{id1}/{id2}")]
+        public async Task<ActionResult<bool>> GetAreTheyFriends(int id1, int id2)
+        {
+            var areTheyFriends = await _context.Friendships
+                .Where(f => (f.Person1Id == id1 && f.Person2Id == id2) || (f.Person1Id == id2 && f.Person2Id == id1))
+                .FirstOrDefaultAsync();
+            if (areTheyFriends == null)
+            {
+                return false;
+            }
+            else return true;
+        }
+
+
         // PUT: api/Friendships/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

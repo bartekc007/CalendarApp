@@ -41,6 +41,19 @@ namespace CalendarAppWebaPI.Controllers
             return @event;
         }
 
+        // GET: api/Events/UserEvents/5
+        [HttpGet("UserEvents/{id}")]
+        public async Task<ActionResult<IEnumerable<Event>>> GetUserEvents(int id)
+        {
+            var events = await _context.Events.Where(e => e.UserID == id).ToListAsync();
+            if (!events.Any())
+            {
+                return NotFound();
+            }
+            else return events;
+        }
+
+
         // PUT: api/Events/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

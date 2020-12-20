@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Web;
+using System.Threading.Tasks;
 
 namespace CalendarAppWebaPI.Models
 {
-    public class UserFriendshipRequestSender
+    public class User
     {
         [Key]
         [Required]
-        public int UserFriendshipRequestSenderId { get; set; }
-        [Required]
         public int UserId { get; set; }
-
         [Required]
-        public int Person2Id { get; set; }
+        public string Name { get; set; }
+        [Required]
+        public string LastName { get; set; }
+        [Required]
+        public string Email { get; set; }
     }
 }

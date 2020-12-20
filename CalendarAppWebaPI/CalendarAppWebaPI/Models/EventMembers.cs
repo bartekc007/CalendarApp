@@ -12,7 +12,7 @@ namespace CalendarAppWebaPI.Models
         [Required]
         public int EventMembersId { get; set; }
         [Required]
-        public string UserID { get; set; }
+        public int UserID { get; set; }
 
         [Required]
         public int EventID { get; set; }

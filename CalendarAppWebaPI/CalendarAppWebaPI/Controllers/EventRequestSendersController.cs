@@ -41,6 +41,24 @@ namespace CalendarAppWebaPI.Controllers
             return eventRequestSender;
         }
 
+        // GET: api/EventRequestSenders/Invitations/5
+        [HttpGet("Invitations/{id}")]
+        public async Task<ActionResult<IEnumerable<User>>> GetInvitations(int id)
+        {
+            var invitationsIds = await _context.EventRequestSenders.Where(e => e.EventId == id).Select(e => e.UserId).ToListAsync();
+            if (!invitationsIds.Any())
+                return NotFound();
+
+            List<User> invitations = new List<User>();
+            foreach (var userId in invitationsIds)
+            {
+                var user = await _context.Users.Where(u => u.UserId == userId).FirstOrDefaultAsync();
+                if (user != null)
+                    invitations.Add(user);
+            }
+            return invitations;
+        }
+
         // PUT: api/EventRequestSenders/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

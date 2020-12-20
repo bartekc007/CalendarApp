@@ -12,10 +12,10 @@ namespace CalendarAppWebaPI.Models
         public int FriendshipId { get; set; }
 
         [Required]
-        public string Person1Id { get; set; }
+        public int Person1Id { get; set; }
 
         [Required]
-        public string Person2Id { get; set; }
+        public int Person2Id { get; set; }
 
         [Required]
         public bool isBlocked { get; set; }

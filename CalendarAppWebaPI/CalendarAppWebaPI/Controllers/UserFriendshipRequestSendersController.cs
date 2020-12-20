@@ -41,6 +41,19 @@ namespace CalendarAppWebaPI.Controllers
             return userFriendshipRequestSender;
         }
 
+
+        // GET: api/UserFriendshipRequestSenders/AlreadyInvited/5/10
+        [HttpGet("AlreadyInvited/{id1}/{id2}")]
+        public async Task<bool> GetAlreadyInvited(int id1, int id2)
+        {
+            var userFriendshipRequestSender = await _context.UserFriendshipRequestSenders.Where(u => (u.UserId == id1 && u.Person2Id == id2) && (u.UserId == id2 && u.Person2Id == id1)).FirstOrDefaultAsync();
+            if (userFriendshipRequestSender == null)
+            {
+                return false;
+            }
+            return true;
+        }
+
         // PUT: api/UserFriendshipRequestSenders/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

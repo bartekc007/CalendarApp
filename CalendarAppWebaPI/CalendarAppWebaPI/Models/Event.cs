@@ -29,7 +29,7 @@ namespace CalendarAppWebaPI.Models
         [Required]
         public string ThemeColor { get; set; }
         [Required]
-        public string UserID { get; set; }
+        public int UserID { get; set; }
         [Required]
         public bool IsPublic { get; set; }
     }

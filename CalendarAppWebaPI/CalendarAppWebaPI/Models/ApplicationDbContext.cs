@@ -13,5 +13,6 @@ namespace CalendarAppWebaPI.Models
         public DbSet<Friendship> Friendships { get; set; }
         public DbSet<UserFriendshipRequestSender> UserFriendshipRequestSenders { get; set; }
         public DbSet<EventRequestSender> EventRequestSenders { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }
