@@ -69,7 +69,15 @@ namespace CalendarAppWebaPI.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(eventMembers).State = EntityState.Modified;
+            if (ModelState.IsValid)
+            {
+                _context.Entry(eventMembers).State = EntityState.Modified;
+            }
+            else
+            {
+                return BadRequest();
+            }
+
 
             try
             {
@@ -95,8 +103,16 @@ namespace CalendarAppWebaPI.Controllers
         [HttpPost]
         public async Task<ActionResult<EventMembers>> PostEventMembers(EventMembers eventMembers)
         {
-            _context.EventMembers.Add(eventMembers);
-            await _context.SaveChangesAsync();
+            if (ModelState.IsValid)
+            {
+                _context.EventMembers.Add(eventMembers);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                return BadRequest();
+            }
+
 
             return CreatedAtAction("GetEventMembers", new { id = eventMembers.EventMembersId }, eventMembers);
         }

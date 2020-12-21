@@ -64,7 +64,15 @@ namespace CalendarAppWebaPI.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(userFriendshipRequestSender).State = EntityState.Modified;
+            if (ModelState.IsValid)
+            {
+                _context.Entry(userFriendshipRequestSender).State = EntityState.Modified;
+            }
+            else
+            {
+                return BadRequest();
+            }
+
 
             try
             {
@@ -90,8 +98,15 @@ namespace CalendarAppWebaPI.Controllers
         [HttpPost]
         public async Task<ActionResult<UserFriendshipRequestSender>> PostUserFriendshipRequestSender(UserFriendshipRequestSender userFriendshipRequestSender)
         {
-            _context.UserFriendshipRequestSenders.Add(userFriendshipRequestSender);
-            await _context.SaveChangesAsync();
+            if (ModelState.IsValid)
+            {
+                _context.UserFriendshipRequestSenders.Add(userFriendshipRequestSender);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                return BadRequest();
+            }
 
             return CreatedAtAction("GetUserFriendshipRequestSender", new { id = userFriendshipRequestSender.UserFriendshipRequestSenderId }, userFriendshipRequestSender);
         }

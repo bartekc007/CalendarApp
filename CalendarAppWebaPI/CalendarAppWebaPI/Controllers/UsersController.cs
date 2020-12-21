@@ -79,7 +79,14 @@ namespace CalendarAppWebaPI.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+            if(ModelState.IsValid)
+            {
+                _context.Entry(user).State = EntityState.Modified;
+            }
+            else
+            {
+                return BadRequest();
+            }
 
             try
             {
@@ -105,10 +112,17 @@ namespace CalendarAppWebaPI.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            if(ModelState.IsValid)
+            {
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUser", new { id = user.UserId }, user);
+                return CreatedAtAction("GetUser", new { id = user.UserId }, user);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         // DELETE: api/Users/5

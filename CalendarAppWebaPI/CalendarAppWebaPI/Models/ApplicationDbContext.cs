@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CalendarAppWebaPI.DBConfigurationModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace CalendarAppWebaPI.Models
 {
@@ -14,5 +15,15 @@ namespace CalendarAppWebaPI.Models
         public DbSet<UserFriendshipRequestSender> UserFriendshipRequestSenders { get; set; }
         public DbSet<EventRequestSender> EventRequestSenders { get; set; }
         public DbSet<User> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelbuilder)
+        {
+            modelbuilder.ApplyConfiguration(new UserConfiguration());
+            modelbuilder.ApplyConfiguration(new EventConfiguration());
+            modelbuilder.ApplyConfiguration(new UserFriendshipRequestSendersConfiguration());
+            modelbuilder.ApplyConfiguration(new FriendshipsConfiguration());
+            modelbuilder.ApplyConfiguration(new EventRequestSendersConfiguration());
+            modelbuilder.ApplyConfiguration(new EventMembersConfiguration());
+        }
     }
 }

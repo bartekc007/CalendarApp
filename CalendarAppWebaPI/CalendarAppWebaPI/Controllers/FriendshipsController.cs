@@ -66,7 +66,15 @@ namespace CalendarAppWebaPI.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(friendship).State = EntityState.Modified;
+            if (ModelState.IsValid)
+            {
+                _context.Entry(friendship).State = EntityState.Modified;
+            }
+            else
+            {
+                return BadRequest();
+            }
+
 
             try
             {
@@ -92,8 +100,16 @@ namespace CalendarAppWebaPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Friendship>> PostFriendship(Friendship friendship)
         {
-            _context.Friendships.Add(friendship);
-            await _context.SaveChangesAsync();
+            if (ModelState.IsValid)
+            {
+                _context.Friendships.Add(friendship);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                return BadRequest();
+            }
+
 
             return CreatedAtAction("GetFriendship", new { id = friendship.FriendshipId }, friendship);
         }
