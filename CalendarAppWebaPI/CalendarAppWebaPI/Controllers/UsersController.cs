@@ -6,6 +6,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CalendarAppWebaPI.Models;
+using Microsoft.Extensions.Options;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CalendarAppWebaPI.Controllers
 {
@@ -14,14 +20,17 @@ namespace CalendarAppWebaPI.Controllers
     public class UsersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly JWTSettings _jwtsettings;
 
-        public UsersController(ApplicationDbContext context)
+        public UsersController(ApplicationDbContext context, IOptions<JWTSettings> jwtsettings)
         {
             _context = context;
+            _jwtsettings = jwtsettings.Value;
         }
 
         // GET: api/Users
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
             return await _context.Users.ToListAsync();
@@ -67,6 +76,40 @@ namespace CalendarAppWebaPI.Controllers
             }
 
             return user;
+        }
+
+        // GET: api/Users/Login
+        [HttpGet("Login/{email}/{password}")]
+        public async Task<ActionResult<UserWithToken>> Login(string email, string password)
+        {
+            var user = await _context.Users.Where(u => u.Email == email
+                                            && u.Password == password)
+                                     .FirstOrDefaultAsync();
+            UserWithToken userWithToken = new UserWithToken(user);
+
+            if(userWithToken == null)
+            {
+                return NotFound();
+            }
+
+            // signing token here 
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_jwtsettings.SecretKey);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, user.Email)
+                }),
+                Expires = DateTime.UtcNow.AddHours(1),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
+                SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            userWithToken.Token = tokenHandler.WriteToken(token);
+
+            return userWithToken;
         }
 
         // PUT: api/Users/5

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace CalendarAppWebaPI.Models
 {
@@ -19,7 +20,9 @@ namespace CalendarAppWebaPI.Models
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            ApplicationDbContext _context = new ApplicationDbContext(null);
+            var _contextOption = new DbContextOptionsBuilder<ApplicationDbContext>().Options;
+            ApplicationDbContext _context = new ApplicationDbContext(_contextOption);
+
             var user = _context.Users.Where(u => u.UserId == UserID).FirstOrDefault();
             if (user == null)
                 yield return new ValidationResult("Invalid UserId. No user " + UserID + " in database");

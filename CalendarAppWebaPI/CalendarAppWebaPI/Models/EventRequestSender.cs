@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -19,7 +20,9 @@ namespace CalendarAppWebaPI.Models
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            ApplicationDbContext _context = new ApplicationDbContext(null);
+            var _contextOption = new DbContextOptionsBuilder<ApplicationDbContext>().Options;
+            ApplicationDbContext _context = new ApplicationDbContext(_contextOption);
+
             var user = _context.Users.Where(u => u.UserId == UserId).FirstOrDefault();
             if (user == null)
                 yield return new ValidationResult("Invalid UserId. No user " + UserId + " in database");
