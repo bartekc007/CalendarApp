@@ -94,6 +94,15 @@ namespace CalendarAppWebaPI.DBConfigurationModels
                     LastName = "Slowacki",
                     Email = "juliusz@slowacki.com",
                     Password = "Password123."
+                },
+                new User
+                {
+                    UserId = 100,
+                    Name = "Admin",
+                    LastName = "Admin",
+                    Email = "admin@calendarapp.com",
+                    Password = "Password123.",
+                    Role = "Admin"
                 }
             );
         }

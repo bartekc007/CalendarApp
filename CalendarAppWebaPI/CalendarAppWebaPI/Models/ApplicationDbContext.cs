@@ -24,6 +24,9 @@ namespace CalendarAppWebaPI.Models
             modelbuilder.ApplyConfiguration(new FriendshipsConfiguration());
             modelbuilder.ApplyConfiguration(new EventRequestSendersConfiguration());
             modelbuilder.ApplyConfiguration(new EventMembersConfiguration());
+
+            modelbuilder.Entity<User>()
+                .Property(user => user.Role).HasDefaultValue("User");
         }
     }
 }

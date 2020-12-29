@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CalendarAppWebaPI.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CalendarAppWebaPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "User, Admin")]
     public class UserFriendshipRequestSendersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;

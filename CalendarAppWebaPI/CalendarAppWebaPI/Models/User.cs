@@ -20,6 +20,8 @@ namespace CalendarAppWebaPI.Models
         public string Email { get; set; }
         [Required]
         public string Password { get; set; }
+        [Required]
+        public string Role { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
@@ -46,6 +48,9 @@ namespace CalendarAppWebaPI.Models
             match = regex.Match(LastName);
             if (!match.Success)
                 yield return new ValidationResult("Invalid Lastname, Can contain only alphabets characters");
+
+            if (Role != "Admin" || Role != "User")
+                yield return new ValidationResult("Invalid Role");
         }
     }
 }
