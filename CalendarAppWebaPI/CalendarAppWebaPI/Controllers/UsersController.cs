@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CalendarAppWebaPI.Models;
 using Microsoft.AspNetCore.Authorization;
+using CalendarAppWebaPI.Contracts;
 
 namespace CalendarAppWebaPI.Controllers
 {
@@ -15,10 +16,12 @@ namespace CalendarAppWebaPI.Controllers
     public class UsersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILoggerService _logger;
 
-        public UsersController(ApplicationDbContext context)
+        public UsersController(ApplicationDbContext context, ILoggerService logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: api/Users
@@ -26,20 +29,26 @@ namespace CalendarAppWebaPI.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            _logger.LogInfo("Fetching all Users from the storage");
+            var users = await _context.Users.ToListAsync();
+            _logger.LogInfo($"Returning {users.Count} users");
+            return users;
         }
 
         // GET: api/Users/5
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
+            _logger.LogInfo($"Fetching User with id: {id} from the storage");
             var user = await _context.Users.FindAsync(id);
 
             if (user == null)
             {
+                _logger.LogInfo($"No user with id: {id} found");
                 return NotFound();
             }
 
+            _logger.LogInfo($"Returning user with id: {id}");
             return user;
         }
 
@@ -48,6 +57,7 @@ namespace CalendarAppWebaPI.Controllers
         public async Task<ActionResult<string>> GetUserName(int id)
         {
             var user = await _context.Users.Where(u=>u.UserId == id).Select(u=>u.Name).FirstOrDefaultAsync();
+            _logger.LogDebug("Debug sth");
 
             if (user == null)
             {
@@ -96,14 +106,17 @@ namespace CalendarAppWebaPI.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
+                
                 if (!UserExists(id))
                 {
+                    _logger.LogError($"User doesn't exist, {ex.Message}");
                     return NotFound();
                 }
                 else
                 {
+                    _logger.LogError($"User exist, {ex.Message}");
                     throw;
                 }
             }
@@ -118,6 +131,7 @@ namespace CalendarAppWebaPI.Controllers
         {
             if(ModelState.IsValid)
             {
+                _logger.LogInfo("Model is Valid");
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
 
@@ -125,6 +139,7 @@ namespace CalendarAppWebaPI.Controllers
             }
             else
             {
+                _logger.LogInfo("Model is not Valid");
                 return BadRequest();
             }
         }
@@ -136,6 +151,7 @@ namespace CalendarAppWebaPI.Controllers
             var user = await _context.Users.FindAsync(id);
             if (user == null)
             {
+                _logger.LogWarn("No user found");
                 return NotFound();
             }
 

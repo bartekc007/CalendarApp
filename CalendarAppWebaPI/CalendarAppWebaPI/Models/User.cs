@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -39,6 +40,7 @@ namespace CalendarAppWebaPI.Models
             if (!match.Success)
                 yield return new ValidationResult("Invalid Email Address");
 
+
             // Name and Lastname validation
             regex = new Regex(@"^[a-zA-Z]+$");
             match = regex.Match(Name);
@@ -48,9 +50,6 @@ namespace CalendarAppWebaPI.Models
             match = regex.Match(LastName);
             if (!match.Success)
                 yield return new ValidationResult("Invalid Lastname, Can contain only alphabets characters");
-
-            if (Role != "Admin" || Role != "User")
-                yield return new ValidationResult("Invalid Role");
         }
     }
 }

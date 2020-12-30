@@ -61,5 +61,53 @@ namespace CalendarAppWebaPI.Controllers
 
             return userWithToken;
         }
+
+        // GET: api/Users/Register
+        [HttpPost("Register")]
+        public ActionResult<UserWithToken> Register(User user)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var ExistingUserByEmail = _context.Users.Where(u => u.Email == user.Email).FirstOrDefault();
+            if (ExistingUserByEmail != null)
+            {
+                return BadRequest("This Email is already in use");
+            }
+
+            _context.Users.Add(user);
+            _context.SaveChanges();
+
+            var newUser = _context.Users.Where(u => u.Email == user.Email
+                                            && u.Password == user.Password).FirstOrDefault();
+            UserWithToken userWithToken = new UserWithToken(newUser);
+
+            if (userWithToken == null)
+            {
+                return NotFound();
+            }
+
+            // signing token here 
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_jwtsettings.SecretKey);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, newUser.Email),
+                    new Claim(ClaimTypes.Role, newUser.Role)
+                }),
+                Expires = DateTime.UtcNow.AddHours(1),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
+                SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            userWithToken.Token = tokenHandler.WriteToken(token);
+
+            return userWithToken;
+        }
     }
 }

@@ -1,0 +1,14 @@
+2020-12-30 13:20:19.9213 INFO Access Friendship Controller
+2020-12-30 13:20:28.8485 DEBUG Got A value
+2020-12-30 13:20:53.1276 ERROR This is an Error
+2020-12-30 15:55:26.6879 INFO Fetching all Users from the storage
+2020-12-30 15:55:27.1105 INFO Returning 12 users
+2020-12-30 15:56:09.0952 INFO Fetching all Users from the storage
+2020-12-30 15:56:09.0952 INFO Returning 11 users
+2020-12-30 16:00:31.3189 INFO Fetching all Users from the storage
+2020-12-30 16:00:31.6107 INFO Returning 11 users
+2020-12-30 16:09:35.5412 INFO Fetching all Users from the storage
+2020-12-30 16:09:35.8659 INFO Returning 11 users
+2020-12-30 16:11:40.9748 INFO Fetching all Users from the storage
+2020-12-30 16:11:41.0106 INFO Returning 11 users
+2020-12-30 16:11:58.5830 INFO Access Friendship Controller

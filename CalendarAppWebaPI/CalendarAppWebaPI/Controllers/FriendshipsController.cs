@@ -7,25 +7,29 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CalendarAppWebaPI.Models;
 using Microsoft.AspNetCore.Authorization;
+using CalendarAppWebaPI.Contracts;
 
 namespace CalendarAppWebaPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "User, Admin")]
+    //[Authorize(Roles = "User, Admin")]
     public class FriendshipsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILoggerService _logger;
 
-        public FriendshipsController(ApplicationDbContext context)
+        public FriendshipsController(ApplicationDbContext context,ILoggerService logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: api/Friendships
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Friendship>>> GetFriendships()
         {
+            _logger.LogInfo("Access Friendship Controller");
             return await _context.Friendships.ToListAsync();
         }
 
@@ -33,6 +37,7 @@ namespace CalendarAppWebaPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Friendship>> GetFriendship(int id)
         {
+            _logger.LogDebug("Got A value");
             var friendship = await _context.Friendships.FindAsync(id);
 
             if (friendship == null)
@@ -47,6 +52,7 @@ namespace CalendarAppWebaPI.Controllers
         [HttpGet("AreTheyFriends/{id1}/{id2}")]
         public async Task<ActionResult<bool>> GetAreTheyFriends(int id1, int id2)
         {
+            _logger.LogError("This is an Error");
             var areTheyFriends = await _context.Friendships
                 .Where(f => (f.Person1Id == id1 && f.Person2Id == id2) || (f.Person1Id == id2 && f.Person2Id == id1))
                 .FirstOrDefaultAsync();
@@ -63,6 +69,7 @@ namespace CalendarAppWebaPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutFriendship(int id, Friendship friendship)
         {
+            _logger.LogWarn("This is a warrning");
             if (id != friendship.FriendshipId)
             {
                 return BadRequest();
