@@ -9,6 +9,11 @@ namespace CalendarAppWebaPI.Models
 {
     public class UserWithToken : IValidatableObject
     {
+        public UserWithToken()
+        {
+
+        }
+
         public UserWithToken(User user)
         {
             this.UserId = user.UserId;

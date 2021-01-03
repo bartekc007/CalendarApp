@@ -27,7 +27,7 @@ namespace CalendarAppWebaPI.Controllers
             _jwtsettings = jwtsettings.Value;
         }
 
-        // GET: api/Users/Login
+        // GET: api/Auth/Login
         [HttpGet("Login/{email}/{password}")]
         public ActionResult<UserWithToken> Login(string email, string password)
         {
@@ -62,7 +62,7 @@ namespace CalendarAppWebaPI.Controllers
             return userWithToken;
         }
 
-        // GET: api/Users/Register
+        // GET: api/Auth/Register
         [HttpPost("Register")]
         public ActionResult<UserWithToken> Register(User user)
         {
@@ -106,6 +106,7 @@ namespace CalendarAppWebaPI.Controllers
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
             userWithToken.Token = tokenHandler.WriteToken(token);
+            
 
             return userWithToken;
         }

@@ -28,6 +28,11 @@ namespace CalendarAppWebaPI
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationDbContext>((options, context) =>
+            {
+                context.UseSqlServer(
+                    Configuration.GetConnectionString("TestingDbConnectionString"));
+            });
 
             var jwtSecton = Configuration.GetSection("JWTSettings");
             services.Configure<JWTSettings>(jwtSecton);

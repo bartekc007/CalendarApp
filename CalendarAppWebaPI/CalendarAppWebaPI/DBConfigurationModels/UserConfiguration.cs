@@ -21,7 +21,8 @@ namespace CalendarAppWebaPI.DBConfigurationModels
                     Name = "Bartek",
                     LastName = "Ciesinski",
                     Email = "bartek@ciesinski.com",
-                    Password = "Password123."
+                    Password = "Password123.",
+                    Role = "User"
                 },
                 new User
                 {
@@ -29,7 +30,8 @@ namespace CalendarAppWebaPI.DBConfigurationModels
                     Name = "Julia",
                     LastName = "Szandula",
                     Email = "julia@szandula.com",
-                    Password = "Password123."
+                    Password = "Password123.",
+                    Role = "User"
                 },
                 new User
                 {
@@ -37,7 +39,8 @@ namespace CalendarAppWebaPI.DBConfigurationModels
                     Name = "Dominika",
                     LastName = "Bazula",
                     Email = "dominika@bazula.com",
-                    Password = "Password123."
+                    Password = "Password123.",
+                    Role = "User"
                 },
                 new User
                 {
@@ -45,7 +48,8 @@ namespace CalendarAppWebaPI.DBConfigurationModels
                     Name = "Krystian",
                     LastName = "Nowak",
                     Email = "krystian@nowak.com",
-                    Password = "Password123."
+                    Password = "Password123.",
+                    Role = "User"
                 },
                 new User
                 {
@@ -53,7 +57,8 @@ namespace CalendarAppWebaPI.DBConfigurationModels
                     Name = "Paula",
                     LastName = "Mroz",
                     Email = "paula@mroz.com",
-                    Password = "Password123."
+                    Password = "Password123.",
+                    Role = "User"
                 },
                 new User
                 {
@@ -61,7 +66,8 @@ namespace CalendarAppWebaPI.DBConfigurationModels
                     Name = "Ola",
                     LastName = "Krason",
                     Email = "ola@krason.com",
-                    Password = "Password123."
+                    Password = "Password123.",
+                    Role = "User"
                 },
                 new User
                 {
@@ -69,7 +75,8 @@ namespace CalendarAppWebaPI.DBConfigurationModels
                     Name = "Albert",
                     LastName = "Gmyr",
                     Email = "albert@gmyr.com",
-                    Password = "Password123."
+                    Password = "Password123.",
+                    Role = "User"
                 },
                 new User
                 {
@@ -77,7 +84,8 @@ namespace CalendarAppWebaPI.DBConfigurationModels
                     Name = "Adam",
                     LastName = "Mickiewicz",
                     Email = "adam@mickiewicz.com",
-                    Password = "Password123."
+                    Password = "Password123.",
+                    Role = "User"
                 },
                 new User
                 {
@@ -85,7 +93,8 @@ namespace CalendarAppWebaPI.DBConfigurationModels
                     Name = "Henryk",
                     LastName = "Sienkiewicz",
                     Email = "henryk@sienkiewicz.com",
-                    Password = "Password123."
+                    Password = "Password123.",
+                    Role = "User"
                 },
                 new User
                 {
@@ -93,7 +102,8 @@ namespace CalendarAppWebaPI.DBConfigurationModels
                     Name = "Juliusz",
                     LastName = "Slowacki",
                     Email = "juliusz@slowacki.com",
-                    Password = "Password123."
+                    Password = "Password123.",
+                    Role = "User"
                 },
                 new User
                 {

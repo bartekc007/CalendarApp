@@ -1,0 +1,48 @@
+2021-01-03 17:34:45.1123 INFO Access Friendship Controller
+2021-01-03 19:49:57.6552 INFO Fetching all Users from the storage
+2021-01-03 19:49:57.7542 INFO Returning 12 users
+2021-01-03 19:54:55.8890 INFO Fetching all Users from the storage
+2021-01-03 19:54:55.9842 INFO Returning 12 users
+2021-01-03 19:56:54.9362 INFO Fetching all Users from the storage
+2021-01-03 19:56:55.0118 INFO Returning 12 users
+2021-01-03 19:57:10.5648 INFO Fetching all Users from the storage
+2021-01-03 19:57:10.6346 INFO Returning 12 users
+2021-01-03 20:05:26.9039 INFO Fetching all Users from the storage
+2021-01-03 20:05:26.9912 INFO Returning 12 users
+2021-01-03 20:07:21.2006 INFO Fetching User with id: 200 from the storage
+2021-01-03 20:07:21.2992 INFO Returning user with id: 200
+2021-01-03 20:09:00.4859 INFO Fetching User with id: 200 from the storage
+2021-01-03 20:09:00.5865 INFO Returning user with id: 200
+2021-01-03 20:09:30.6401 INFO Fetching all Users from the storage
+2021-01-03 20:09:30.7447 INFO Returning 12 users
+2021-01-03 20:10:14.6112 INFO Fetching User with id: 200 from the storage
+2021-01-03 20:10:14.7208 INFO Returning user with id: 200
+2021-01-03 20:11:23.7348 INFO Fetching all Users from the storage
+2021-01-03 20:11:23.8029 INFO Returning 12 users
+2021-01-03 20:14:39.4983 INFO Fetching User with id: 200 from the storage
+2021-01-03 20:14:39.6227 INFO Returning user with id: 200
+2021-01-03 20:15:54.7492 INFO Fetching all Users from the storage
+2021-01-03 20:15:54.8346 INFO Returning 12 users
+2021-01-03 20:19:20.4052 INFO Fetching all Users from the storage
+2021-01-03 20:19:20.4962 INFO Returning 12 users
+2021-01-03 20:29:52.7010 INFO Fetching all Users from the storage
+2021-01-03 20:29:52.7884 INFO Returning 12 users
+2021-01-03 20:30:34.2351 INFO Model is Valid
+2021-01-03 20:30:45.3306 INFO Fetching User with id: 201 from the storage
+2021-01-03 20:30:45.3744 INFO Returning user with id: 201
+2021-01-03 20:31:53.7957 INFO Fetching all Users from the storage
+2021-01-03 20:31:53.8805 INFO Returning 12 users
+2021-01-03 20:32:37.1708 INFO Model is Valid
+2021-01-03 20:32:37.3009 INFO Fetching User with id: 201 from the storage
+2021-01-03 20:32:37.3347 INFO Returning user with id: 201
+2021-01-03 20:32:45.6889 INFO Fetching all Users from the storage
+2021-01-03 20:32:45.7693 INFO Returning 12 users
+2021-01-03 20:32:53.1880 INFO Fetching all Users from the storage
+2021-01-03 20:32:53.2757 INFO Returning 12 users
+2021-01-03 20:33:52.3905 INFO Fetching all Users from the storage
+2021-01-03 20:33:52.4903 INFO Returning 12 users
+2021-01-03 22:41:22.9047 INFO Fetching all Users from the storage
+2021-01-03 22:41:22.9885 INFO Returning 12 users
+2021-01-03 22:41:58.5689 INFO Model is Valid
+2021-01-03 22:42:02.7099 INFO Fetching User with id: 201 from the storage
+2021-01-03 22:42:02.7527 INFO Returning user with id: 201
