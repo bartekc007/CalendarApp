@@ -29,9 +29,9 @@ namespace CalendarAppIntegrationTests
             TestClient = factory.CreateClient();
         }
 
-        protected async Task AuthenticateAsync()
+        protected async Task AuthenticateAsync(string role,int id)
         {
-            TestClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", await GetJwtAsync());
+            TestClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", await GetJwtAsync(role,id));
         }
 
         protected async Task<User> CreateUserAsync(User request)
@@ -40,17 +40,25 @@ namespace CalendarAppIntegrationTests
             return await response.Content.ReadAsAsync<User>();
         }
 
-        private async Task<string> GetJwtAsync()
+        protected async Task<Event> CreateEventAsync(Event request)
+        {
+            var response = await TestClient.PostAsJsonAsync(ApiRoutes.Events.PostEvents, request);
+            return await response.Content.ReadAsAsync<Event>();
+        }
+
+        private async Task<string> GetJwtAsync(string role,int id)
         {
             var user = new User
             {
-                UserId = 200,
+                UserId = id,
                 Name = "TestName",
                 LastName = "TestLastName",
                 Email = "test@integration.com",
                 Password = "Password123.",
-                Role = "User"
+                Role = role
             };
+            if (user.Role == "Admin")
+                user.UserId = 300;
 
           
             string contents = JsonConvert.SerializeObject(user);

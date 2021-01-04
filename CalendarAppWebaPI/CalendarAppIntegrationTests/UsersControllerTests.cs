@@ -2,9 +2,11 @@
 using CalendarAppWebaPI.Contracts;
 using CalendarAppWebaPI.Models;
 using FluentAssertions;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -22,7 +24,7 @@ namespace CalendarAppIntegrationTests
         public async Task GetAll_Users_Test()
         {
             // Arange
-            await AuthenticateAsync();
+            await AuthenticateAsync("User",200);
 
             // Act
             var response = await TestClient.GetAsync(ApiRoutes.Users.GetUsers);
@@ -36,10 +38,10 @@ namespace CalendarAppIntegrationTests
         public async Task Get_User_WithID_Test()
         {
             // Arange
-            await AuthenticateAsync();
+            await AuthenticateAsync("User",201);
             var createdUser = await CreateUserAsync(new User
             {
-                UserId = 201,
+                UserId = 202,
                 Name = "TestName",
                 LastName = "TestLastName",
                 Email = "test@integration.com",
@@ -56,6 +58,45 @@ namespace CalendarAppIntegrationTests
             var returnedUser = await response.Content.ReadAsAsync<User>();
             returnedUser.UserId.Should().Be(createdUser.UserId);
             returnedUser.Email.Should().Be(createdUser.Email);
+        }
+
+        [Fact]
+        public async Task Put_User_WithValidData_Test()
+        {
+            // Arange
+            await AuthenticateAsync("User",202);
+            var createdUser = await CreateUserAsync(new User
+            {
+                UserId = 201,
+                Name = "TestName",
+                LastName = "TestLastName",
+                Email = "test@integration.com",
+                Password = "Password123.",
+                Role = "User"
+            });
+
+            // Act
+            var user = new User
+            {
+                UserId = createdUser.UserId,
+                Name = "ChangedTestName",
+                LastName = "ChangedTestLastName",
+                Email = "test@integration.com",
+                Password = "Password123.",
+                Role = "User"
+            };
+
+            string contents = JsonConvert.SerializeObject(user);
+            var response = await TestClient.PutAsync(ApiRoutes.Users.PutUsers
+                .Replace("{userId}", createdUser.UserId.ToString()),new StringContent(contents, Encoding.UTF8, "application/json"));
+
+            var getResponse = await TestClient.GetAsync(ApiRoutes.Users.GetUser.Replace("{userId}", createdUser.UserId.ToString()));
+            
+            // Assert
+            var returnedUser = await getResponse.Content.ReadAsAsync<User>();
+            returnedUser.UserId.Should().Be(user.UserId);
+            returnedUser.Name.Should().Be(user.Name);
+            returnedUser.LastName.Should().Be(user.LastName);
         }
     }
 }

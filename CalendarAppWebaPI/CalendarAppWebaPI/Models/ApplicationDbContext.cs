@@ -9,6 +9,7 @@ namespace CalendarAppWebaPI.Models
         {
 
         }
+
         public DbSet<Event> Events { get; set; }
         public DbSet<EventMembers> EventMembers { get; set; }
         public DbSet<Friendship> Friendships { get; set; }
