@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CalendarAppWebaPI.Models;
 using Microsoft.AspNetCore.Authorization;
+using CalendarAppWebaPI.DTO;
 
 namespace CalendarAppWebaPI.Controllers
 {
@@ -43,20 +44,23 @@ namespace CalendarAppWebaPI.Controllers
             return eventRequestSender;
         }
 
-        // GET: api/EventRequestSenders/Invitations/5
-        [HttpGet("Invitations/{id}")]
-        public async Task<ActionResult<IEnumerable<User>>> GetInvitations(int id)
+        // GET: api/EventRequestSenders/5/Invitations
+        [HttpGet("{id}/Invitations")]
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetInvitations(int id)
         {
             var invitationsIds = await _context.EventRequestSenders.Where(e => e.EventId == id).Select(e => e.UserId).ToListAsync();
             if (!invitationsIds.Any())
                 return NotFound();
 
-            List<User> invitations = new List<User>();
+            List<UserDTO> invitations = new List<UserDTO>();
             foreach (var userId in invitationsIds)
             {
                 var user = await _context.Users.Where(u => u.UserId == userId).FirstOrDefaultAsync();
                 if (user != null)
-                    invitations.Add(user);
+                {
+                    UserDTO userDTO = new UserDTO(user);
+                    invitations.Add(userDTO);
+                }
             }
             return invitations;
         }
@@ -71,15 +75,20 @@ namespace CalendarAppWebaPI.Controllers
                 return BadRequest();
             }
 
-            if (ModelState.IsValid)
-            {
-                _context.Entry(eventRequestSender).State = EntityState.Modified;
-            }
-            else
+            var events = await _context.Events.Where(e => e.EventId == eventRequestSender.EventId).FirstOrDefaultAsync();
+            if (events == null)
             {
                 return BadRequest();
             }
 
+            var user = await _context.Users.Where(u => u.UserId == eventRequestSender.UserId).FirstOrDefaultAsync();
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(eventRequestSender).State = EntityState.Modified;
+      
 
             try
             {
@@ -105,16 +114,21 @@ namespace CalendarAppWebaPI.Controllers
         [HttpPost]
         public async Task<ActionResult<EventRequestSender>> PostEventRequestSender(EventRequestSender eventRequestSender)
         {
-            if (ModelState.IsValid)
-            {
-                _context.EventRequestSenders.Add(eventRequestSender);
-                await _context.SaveChangesAsync();
-            }
-            else
+
+            var events = await _context.Events.Where(e => e.EventId == eventRequestSender.EventId).FirstOrDefaultAsync();
+            if (events == null)
             {
                 return BadRequest();
             }
 
+            var user = await _context.Users.Where(u => u.UserId == eventRequestSender.UserId).FirstOrDefaultAsync();
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            _context.EventRequestSenders.Add(eventRequestSender);
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetEventRequestSender", new { id = eventRequestSender.EventRequestSenderId }, eventRequestSender);
         }

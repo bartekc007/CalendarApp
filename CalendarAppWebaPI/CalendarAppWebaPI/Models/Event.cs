@@ -1,9 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace CalendarAppWebaPI.Models
 {
@@ -36,13 +33,6 @@ namespace CalendarAppWebaPI.Models
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            /*var _contextOption = new DbContextOptionsBuilder<ApplicationDbContext>().Options;
-            ApplicationDbContext _context = new ApplicationDbContext(_contextOption);
-            var user = _context.Users.Where(u => u.UserId == UserID).FirstOrDefault();
-
-            if (user == null)
-                yield return new ValidationResult("Invalid UserId.No user " + UserID + " in database");*/
-
             if ((TimeEnd - TimeStart > TimeSpan.FromDays(1)) && IsFullDay == true)
                 yield return new ValidationResult("Event Can not be fullday-event, Event takes more than one day");
 

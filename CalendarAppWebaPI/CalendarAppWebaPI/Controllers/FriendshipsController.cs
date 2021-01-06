@@ -48,8 +48,8 @@ namespace CalendarAppWebaPI.Controllers
             return friendship;
         }
 
-        // GET: api/Friendships/AreTheyFriends/5/10
-        [HttpGet("AreTheyFriends/{id1}/{id2}")]
+        // GET: api/Friendships/5/10/AreTheyFriends
+        [HttpGet("{id1}/{id2}/AreTheyFriends")]
         public async Task<ActionResult<bool>> GetAreTheyFriends(int id1, int id2)
         {
             _logger.LogError("This is an Error");
@@ -75,16 +75,20 @@ namespace CalendarAppWebaPI.Controllers
                 return BadRequest();
             }
 
-            if (ModelState.IsValid)
-            {
-                _context.Entry(friendship).State = EntityState.Modified;
-            }
-            else
+            var person1 = await _context.UserFriendshipRequestSenders.Where(u => u.UserId == friendship.Person1Id).FirstOrDefaultAsync();
+            if (person1 == null)
             {
                 return BadRequest();
             }
 
+            var person2 = await _context.UserFriendshipRequestSenders.Where(u => u.UserId == friendship.Person2Id).FirstOrDefaultAsync();
+            if (person2 == null)
+            {
+                return BadRequest();
+            }
 
+            _context.Entry(friendship).State = EntityState.Modified;
+            
             try
             {
                 await _context.SaveChangesAsync();
@@ -109,17 +113,21 @@ namespace CalendarAppWebaPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Friendship>> PostFriendship(Friendship friendship)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Friendships.Add(friendship);
-                await _context.SaveChangesAsync();
-            }
-            else
+            var person1 = await _context.Users.Where(u => u.UserId == friendship.Person1Id).FirstOrDefaultAsync();
+            if (person1 == null)
             {
                 return BadRequest();
             }
 
+            var person2 = await _context.Users.Where(u => u.UserId == friendship.Person2Id).FirstOrDefaultAsync();
+            if (person2 == null)
+            {
+                return BadRequest();
+            }
 
+            _context.Friendships.Add(friendship);
+            await _context.SaveChangesAsync();
+            
             return CreatedAtAction("GetFriendship", new { id = friendship.FriendshipId }, friendship);
         }
 

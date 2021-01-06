@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CalendarAppWebaPI.Models;
@@ -43,8 +41,8 @@ namespace CalendarAppWebaPI.Controllers
             return @event;
         }
 
-        // GET: api/Events/UserEvents/5
-        [HttpGet("UserEvents/{id}")]
+        // GET: api/Events/5/UserEvents
+        [HttpGet("{id}/UserEvents")]
         public async Task<ActionResult<IEnumerable<Event>>> GetUserEvents(int id)
         {
             var events = await _context.Events.Where(e => e.UserID == id).ToListAsync();
@@ -68,6 +66,11 @@ namespace CalendarAppWebaPI.Controllers
 
             if (ModelState.IsValid)
             {
+                var user = await _context.Users.Where(u => u.UserId == @event.UserID).FirstOrDefaultAsync();
+                if (user == null)
+                {
+                    return BadRequest("Wrong User ID");
+                }
                 _context.Entry(@event).State = EntityState.Modified;
             }
             else
@@ -101,6 +104,11 @@ namespace CalendarAppWebaPI.Controllers
         {
             if (ModelState.IsValid)
             {
+                var user = await _context.Users.Where(u => u.UserId == @event.UserID).FirstOrDefaultAsync();
+                if(user == null)
+                {
+                    return BadRequest("Wrong User ID");
+                }
                 _context.Events.Add(@event);
                 await _context.SaveChangesAsync();
             }

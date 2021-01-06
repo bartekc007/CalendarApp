@@ -1,16 +1,12 @@
 ﻿using CalendarAppWebaPI.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
-using System.Data.Entity;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CalendarAppWebaPI.Controllers
 {
@@ -27,13 +23,19 @@ namespace CalendarAppWebaPI.Controllers
             _jwtsettings = jwtsettings.Value;
         }
 
-        // GET: api/Auth/Login
-        [HttpGet("Login/{email}/{password}")]
-        public ActionResult<UserWithToken> Login(string email, string password)
+        // POST: api/Login
+        [HttpPost("Login")]
+        public ActionResult<UserWithToken> Login(UserLoginRequest userRequest)
         {
-            var user = _context.Users.Where(u => u.Email == email
-                                            && u.Password == password)
-                                     .FirstOrDefault();
+            var user = _context.Users.Where(u => u.Email == userRequest.Email).FirstOrDefault();
+
+            bool isValidPassword = BCrypt.Net.BCrypt.Verify(userRequest.Password, user.Password);
+
+            if (!isValidPassword)
+            {
+                return NotFound();
+            }
+
             UserWithToken userWithToken = new UserWithToken(user);
 
             if (userWithToken == null)
@@ -62,7 +64,7 @@ namespace CalendarAppWebaPI.Controllers
             return userWithToken;
         }
 
-        // GET: api/Auth/Register
+        // POST: api/Auth/Register
         [HttpPost("Register")]
         public ActionResult<UserWithToken> Register(User user)
         {
@@ -77,6 +79,7 @@ namespace CalendarAppWebaPI.Controllers
                 return BadRequest("This Email is already in use");
             }
 
+            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             _context.Users.Add(user);
             _context.SaveChanges();
 

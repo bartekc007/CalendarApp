@@ -11,7 +11,7 @@ namespace CalendarAppWebaPI.Contracts
         public static class Auth
         {
             public const string Register = "api/Auth/Register";
-            public const string Login = "api/Auth/Login/{email}/{password}";
+            public const string Login = "api/Auth/Login";
         }
         public static class Users
         {

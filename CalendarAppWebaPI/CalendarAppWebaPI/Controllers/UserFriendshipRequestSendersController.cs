@@ -44,8 +44,8 @@ namespace CalendarAppWebaPI.Controllers
         }
 
 
-        // GET: api/UserFriendshipRequestSenders/AlreadyInvited/5/10
-        [HttpGet("AlreadyInvited/{id1}/{id2}")]
+        // GET: api/UserFriendshipRequestSenders/5/10/AlreadyInvited
+        [HttpGet("{id1}/{id2}/AlreadyInvited")]
         public async Task<bool> GetAlreadyInvited(int id1, int id2)
         {
             var userFriendshipRequestSender = await _context.UserFriendshipRequestSenders.Where(u => (u.UserId == id1 && u.Person2Id == id2) && (u.UserId == id2 && u.Person2Id == id1)).FirstOrDefaultAsync();
@@ -66,16 +66,20 @@ namespace CalendarAppWebaPI.Controllers
                 return BadRequest();
             }
 
-            if (ModelState.IsValid)
-            {
-                _context.Entry(userFriendshipRequestSender).State = EntityState.Modified;
-            }
-            else
+            var user = await _context.UserFriendshipRequestSenders.Where(u => u.UserId == userFriendshipRequestSender.UserId).FirstOrDefaultAsync();
+            if (user == null)
             {
                 return BadRequest();
             }
 
+            var person2 = await _context.UserFriendshipRequestSenders.Where(u => u.UserId == userFriendshipRequestSender.Person2Id).FirstOrDefaultAsync();
+            if (person2 == null)
+            {
+                return BadRequest();
+            }
 
+            _context.Entry(userFriendshipRequestSender).State = EntityState.Modified;
+           
             try
             {
                 await _context.SaveChangesAsync();

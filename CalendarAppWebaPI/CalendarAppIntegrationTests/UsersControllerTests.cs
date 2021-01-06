@@ -57,7 +57,6 @@ namespace CalendarAppIntegrationTests
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var returnedUser = await response.Content.ReadAsAsync<User>();
             returnedUser.UserId.Should().Be(createdUser.UserId);
-            returnedUser.Email.Should().Be(createdUser.Email);
         }
 
         [Fact]

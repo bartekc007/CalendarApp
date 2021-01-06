@@ -1,17 +1,11 @@
 ﻿using CalendarAppWebaPI;
 using CalendarAppWebaPI.Models;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using CalendarAppWebaPI.Contracts;
-using System.Net.Http.Formatting;
 using Newtonsoft.Json;
 using System.Text;
-using System;
 using Xunit;
 
 namespace CalendarAppIntegrationTests
@@ -65,7 +59,9 @@ namespace CalendarAppIntegrationTests
             var response = await TestClient.PostAsync(ApiRoutes.Auth.Register, new StringContent(contents, Encoding.UTF8, "application/json"));
             if(response.StatusCode== System.Net.HttpStatusCode.BadRequest)
             {
-                response = await TestClient.GetAsync(ApiRoutes.Auth.Login.Replace("{email}", "test@integration.com").Replace("{password}","Password123."));
+                UserLoginRequest userReq = new UserLoginRequest(user.Email, user.Password);
+                contents = JsonConvert.SerializeObject(user);
+                response = await TestClient.PostAsync(ApiRoutes.Auth.Login, new StringContent(contents, Encoding.UTF8, "application/json"));
             }
 
             var registrationResponseStr = await response.Content.ReadAsStringAsync();

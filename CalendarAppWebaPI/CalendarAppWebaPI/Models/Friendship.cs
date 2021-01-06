@@ -7,7 +7,7 @@ using System.Web;
 
 namespace CalendarAppWebaPI.Models
 {
-    public class Friendship : IValidatableObject
+    public class Friendship
     {
         [Required]
         public int FriendshipId { get; set; }
@@ -20,20 +20,5 @@ namespace CalendarAppWebaPI.Models
 
         [Required]
         public bool isBlocked { get; set; }
-
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            var _contextOption = new DbContextOptionsBuilder<ApplicationDbContext>().Options;
-            ApplicationDbContext _context = new ApplicationDbContext(_contextOption);
-
-            var user = _context.Users.Where(u => u.UserId == Person1Id).FirstOrDefault();
-
-            if (user == null)
-                yield return new ValidationResult("Invalid UserId.No user " + Person1Id + " in database");
-
-            user = _context.Users.Where(u => u.UserId == Person2Id).FirstOrDefault();
-            if (user == null)
-                yield return new ValidationResult("Invalid UserId.No user " + Person2Id + " in database");
-        }
     }
 }
