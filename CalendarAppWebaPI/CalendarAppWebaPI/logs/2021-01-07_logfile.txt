@@ -1,0 +1,14 @@
+2021-01-07 16:20:36.4922 INFO Fetching all Users from the storage
+2021-01-07 16:20:36.6707 INFO Returning 12 users
+2021-01-07 16:22:44.8351 INFO Fetching all Users from the storage
+2021-01-07 16:22:44.8552 INFO Returning 12 users
+2021-01-07 22:11:55.3494 INFO Fetching all Users from the storage
+2021-01-07 22:11:55.4227 INFO Returning 13 users
+2021-01-07 22:20:42.0703 INFO Fetching all Users from the storage
+2021-01-07 22:20:42.1253 INFO Returning 13 users
+2021-01-07 22:20:42.3846 INFO Model is Valid
+2021-01-07 22:20:42.4567 INFO Fetching User with id: 201 from the storage
+2021-01-07 22:20:42.4892 INFO Returning user with id: 201
+2021-01-07 22:20:42.7574 INFO Model is Valid
+2021-01-07 22:20:42.7574 INFO Fetching User with id: 202 from the storage
+2021-01-07 22:20:42.7574 INFO Returning user with id: 202

@@ -13,7 +13,7 @@ namespace CalendarAppWebaPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles = "User, Admin")]
+    [Authorize(Roles = "User, Admin")]
     public class FriendshipsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;

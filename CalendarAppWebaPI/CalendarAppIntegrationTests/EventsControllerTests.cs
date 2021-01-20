@@ -26,7 +26,7 @@ namespace CalendarAppIntegrationTests
         public async Task GetAll_Events_Test()
         {
             // Arange
-            await AuthenticateAsync("Admin",250);
+            await AuthenticateAsync("Admin",250, "test0@integration.com");
             var createdEvent = await CreateEventAsync(new Event
             {
                 EventId = 100,
@@ -53,7 +53,7 @@ namespace CalendarAppIntegrationTests
         public async Task Get_Event_WithID_Test()
         {
             // Arange
-            await AuthenticateAsync("Admin",252);
+            await AuthenticateAsync("Admin",251, "test1@integration.com");
             var createdEvent = await CreateEventAsync(new Event
             {
                 EventId = 102,
@@ -63,7 +63,7 @@ namespace CalendarAppIntegrationTests
                 TimeEnd = new DateTime(2020, 1, 4, 12, 0, 0),
                 IsFullDay = false,
                 ThemeColor = "blue",
-                UserID = 252,
+                UserID = 251,
                 IsPublic = true
             });
 
@@ -81,7 +81,7 @@ namespace CalendarAppIntegrationTests
         public async Task Put_Event_WithValidData_Test()
         {
             // Arange
-            await AuthenticateAsync("Admin", 253);
+            await AuthenticateAsync("Admin", 252, "test2@integration.com");
             var createdEvent = await CreateEventAsync(new Event
             {
                 EventId = 103,
@@ -91,7 +91,7 @@ namespace CalendarAppIntegrationTests
                 TimeEnd = new DateTime(2020, 1, 4, 12, 0, 0),
                 IsFullDay = false,
                 ThemeColor = "blue",
-                UserID = 253,
+                UserID = 252,
                 IsPublic = true
             });
 
@@ -105,7 +105,7 @@ namespace CalendarAppIntegrationTests
                 TimeEnd = new DateTime(2020, 1, 4, 12, 0, 0),
                 IsFullDay = false,
                 ThemeColor = "blue",
-                UserID = 253,
+                UserID = 252,
                 IsPublic = true
             };
             string contents = JsonConvert.SerializeObject(editedEvent);

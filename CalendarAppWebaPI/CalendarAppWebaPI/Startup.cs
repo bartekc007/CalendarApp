@@ -1,6 +1,7 @@
 using CalendarAppWebaPI.Contracts;
 using CalendarAppWebaPI.Models;
 using CalendarAppWebaPI.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,30 +35,37 @@ namespace CalendarAppWebaPI
                     Configuration.GetConnectionString("TestingDbConnectionString"));
             });
 
-            var jwtSecton = Configuration.GetSection("JWTSettings");
-            services.Configure<JWTSettings>(jwtSecton);
+            /* var jwtSecton = Configuration.GetSection("JWTSettings");
+             services.Configure<JWTSettings>(jwtSecton);
 
-            // To validate the token witch has been sent by client
-            var appSettings = jwtSecton.Get<JWTSettings>();
-            var key = Encoding.ASCII.GetBytes(appSettings.SecretKey);
+             // To validate the token witch has been sent by client
+             var appSettings = jwtSecton.Get<JWTSettings>();
+             var key = Encoding.ASCII.GetBytes(appSettings.SecretKey);
 
-            services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(x =>
-            {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
+             services.AddAuthentication(x =>
+             {
+                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+             })
+             .AddJwtBearer(x =>
+             {
+                 x.RequireHttpsMetadata = false;
+                 x.SaveToken = true;
+                 x.TokenValidationParameters = new TokenValidationParameters
+                 {
+                     ValidateIssuerSigningKey = true,
+                     IssuerSigningKey = new SymmetricSecurityKey(key),
+                     ValidateIssuer = false,
+                     ValidateAudience = false
+                 };
+             });*/
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
                 {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-            });
+                    options.LoginPath = "/api/Auth/Login";
+                    options.Cookie.Name = "CalAppCookie";
+                });
             
             services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -86,6 +94,8 @@ namespace CalendarAppWebaPI
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseCookiePolicy();
 
             app.UseEndpoints(endpoints =>
             {

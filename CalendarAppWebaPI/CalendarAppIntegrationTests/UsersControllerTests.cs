@@ -1,5 +1,6 @@
 ﻿using CalendarAppWebaPI;
 using CalendarAppWebaPI.Contracts;
+using CalendarAppWebaPI.DTO;
 using CalendarAppWebaPI.Models;
 using FluentAssertions;
 using Newtonsoft.Json;
@@ -24,27 +25,36 @@ namespace CalendarAppIntegrationTests
         public async Task GetAll_Users_Test()
         {
             // Arange
-            await AuthenticateAsync("User",200);
+            await AuthenticateAsync("User",200, "test3@integration.com");
 
             // Act
+            var createdUser = await CreateUserAsync(new User
+            {
+                UserId = 201,
+                Name = "TestName",
+                LastName = "TestLastName",
+                Email = "test3test1@integration.com",
+                Password = "Password123.",
+                Role = "User"
+            });
             var response = await TestClient.GetAsync(ApiRoutes.Users.GetUsers);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            (await response.Content.ReadAsAsync<List<User>>()).Should().NotBeNull();
+            (await response.Content.ReadAsAsync<List<UserDTO>>()).Should().NotBeNull();
         }
 
         [Fact]
         public async Task Get_User_WithID_Test()
         {
             // Arange
-            await AuthenticateAsync("User",201);
+            await AuthenticateAsync("User",202, "test4@integration.com");
             var createdUser = await CreateUserAsync(new User
             {
-                UserId = 202,
+                UserId = 203,
                 Name = "TestName",
                 LastName = "TestLastName",
-                Email = "test@integration.com",
+                Email = "test7@integration.com",
                 Password = "Password123.",
                 Role = "User"
             });
@@ -63,13 +73,13 @@ namespace CalendarAppIntegrationTests
         public async Task Put_User_WithValidData_Test()
         {
             // Arange
-            await AuthenticateAsync("User",202);
+            await AuthenticateAsync("User",204, "test5@integration.com");
             var createdUser = await CreateUserAsync(new User
             {
-                UserId = 201,
+                UserId = 205,
                 Name = "TestName",
                 LastName = "TestLastName",
-                Email = "test@integration.com",
+                Email = "test8@integration.com",
                 Password = "Password123.",
                 Role = "User"
             });
@@ -80,7 +90,7 @@ namespace CalendarAppIntegrationTests
                 UserId = createdUser.UserId,
                 Name = "ChangedTestName",
                 LastName = "ChangedTestLastName",
-                Email = "test@integration.com",
+                Email = "test9@integration.com",
                 Password = "Password123.",
                 Role = "User"
             };

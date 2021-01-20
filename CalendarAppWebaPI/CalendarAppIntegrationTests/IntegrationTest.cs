@@ -23,36 +23,38 @@ namespace CalendarAppIntegrationTests
             TestClient = factory.CreateClient();
         }
 
-        protected async Task AuthenticateAsync(string role,int id)
+        protected async Task AuthenticateAsync(string role,int id,string email)
         {
-            TestClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", await GetJwtAsync(role,id));
+            await GetJwtAsync(role, id, email);
+            //TestClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", );
         }
 
         protected async Task<User> CreateUserAsync(User request)
         {
-            var response = await TestClient.PostAsJsonAsync(ApiRoutes.Users.PostUsers, request);
+            string contents = JsonConvert.SerializeObject(request);
+            var response = await TestClient.PostAsync(ApiRoutes.Users.PostUsers, new StringContent(contents, Encoding.UTF8, "application/json"));
             return await response.Content.ReadAsAsync<User>();
         }
 
         protected async Task<Event> CreateEventAsync(Event request)
         {
-            var response = await TestClient.PostAsJsonAsync(ApiRoutes.Events.PostEvents, request);
+            string contents = JsonConvert.SerializeObject(request);
+            var response = await TestClient.PostAsync(ApiRoutes.Events.PostEvents, new StringContent(contents, Encoding.UTF8, "application/json"));
             return await response.Content.ReadAsAsync<Event>();
         }
 
-        private async Task<string> GetJwtAsync(string role,int id)
+        private async Task GetJwtAsync(string role,int id,string email)
         {
             var user = new User
             {
                 UserId = id,
                 Name = "TestName",
                 LastName = "TestLastName",
-                Email = "test@integration.com",
+                Email = email,
                 Password = "Password123.",
                 Role = role
             };
-            if (user.Role == "Admin")
-                user.UserId = 300;
+            
 
           
             string contents = JsonConvert.SerializeObject(user);
@@ -66,7 +68,7 @@ namespace CalendarAppIntegrationTests
 
             var registrationResponseStr = await response.Content.ReadAsStringAsync();
             var registrationResponse = JsonConvert.DeserializeObject<UserWithToken>(registrationResponseStr);
-            return registrationResponse.Token;
+            //return registrationResponse.Token;
 
         }
     }

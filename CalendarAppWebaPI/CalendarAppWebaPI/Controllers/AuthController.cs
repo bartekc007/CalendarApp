@@ -1,12 +1,13 @@
-﻿using CalendarAppWebaPI.Models;
+﻿using CalendarAppWebaPI.DTO;
+using CalendarAppWebaPI.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.IdentityModel.Tokens.Jwt;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace CalendarAppWebaPI.Controllers
 {
@@ -25,9 +26,13 @@ namespace CalendarAppWebaPI.Controllers
 
         // POST: api/Login
         [HttpPost("Login")]
-        public ActionResult<UserWithToken> Login(UserLoginRequest userRequest)
+        public async Task<ActionResult<UserDTO>> Login(UserLoginRequest userRequest)
         {
             var user = _context.Users.Where(u => u.Email == userRequest.Email).FirstOrDefault();
+            if(user==null)
+            {
+                return NotFound();
+            }
 
             bool isValidPassword = BCrypt.Net.BCrypt.Verify(userRequest.Password, user.Password);
 
@@ -36,7 +41,20 @@ namespace CalendarAppWebaPI.Controllers
                 return NotFound();
             }
 
-            UserWithToken userWithToken = new UserWithToken(user);
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.Email),
+                new Claim(ClaimTypes.Role, user.Role)
+            };
+            var identity = new ClaimsIdentity(
+                claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+            var props = new AuthenticationProperties();
+            HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,principal, props).Wait();
+            UserDTO userDTO = new UserDTO(user);
+            return userDTO;
+            /*UserWithToken userWithToken = new UserWithToken(user);
 
             if (userWithToken == null)
             {
@@ -61,12 +79,12 @@ namespace CalendarAppWebaPI.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             userWithToken.Token = tokenHandler.WriteToken(token);
 
-            return userWithToken;
+            return userWithToken;*/
         }
 
         // POST: api/Auth/Register
         [HttpPost("Register")]
-        public ActionResult<UserWithToken> Register(User user)
+        public async Task<ActionResult<UserDTO>> Register(User user)
         {
             if(!ModelState.IsValid)
             {
@@ -85,15 +103,25 @@ namespace CalendarAppWebaPI.Controllers
 
             var newUser = _context.Users.Where(u => u.Email == user.Email
                                             && u.Password == user.Password).FirstOrDefault();
-            UserWithToken userWithToken = new UserWithToken(newUser);
+            UserDTO userDTO = new UserDTO(newUser);
 
-            if (userWithToken == null)
+
+            var claims = new List<Claim>
             {
-                return NotFound();
-            }
+                new Claim(ClaimTypes.Name, user.Email),
+                new Claim(ClaimTypes.Role, user.Role)
+            };
+            var identity = new ClaimsIdentity(
+                claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+            var props = new AuthenticationProperties();
+            HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme, principal, props).Wait();
+
+            return userDTO;
 
             // signing token here 
-            var tokenHandler = new JwtSecurityTokenHandler();
+            /*var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtsettings.SecretKey);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -108,10 +136,16 @@ namespace CalendarAppWebaPI.Controllers
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            userWithToken.Token = tokenHandler.WriteToken(token);
-            
+            userWithToken.Token = tokenHandler.WriteToken(token);*/
 
-            return userWithToken;
+        }
+
+        // POST: /api/Auth/Logout
+        [HttpPost("Logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return Ok();
         }
     }
 }
