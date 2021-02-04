@@ -44,7 +44,7 @@ namespace CalendarAppWebaPI.Controllers
             return eventMembers;
         }
 
-        // GET: api/EventRequestSenders/5/Members
+        // GET: api/EventMembers/5/Members
         [HttpGet("{id}/Members")]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetInvitations(int id)
         {
